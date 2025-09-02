@@ -1,3 +1,2 @@
-# Just my personal rust project template.
+# MQ
 
-Quick set up a rust project.

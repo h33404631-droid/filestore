@@ -11,15 +11,3 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-pub use serde;
-
-pub mod pb {
-    pub const GRPC_DESC: &[u8] = tonic::include_file_descriptor_set!("rsketch_grpc_desc");
-
-    pub mod hello {
-        pub mod v1 {
-            tonic::include_proto!("rsketch.hello.v1");
-        }
-    }
-}
