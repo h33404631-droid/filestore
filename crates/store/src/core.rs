@@ -105,6 +105,29 @@ pub trait Store {
 #[derive(Debug, derive_more::Deref, derive_more::AsRef, Clone)]
 pub struct Location(u64);
 
+impl Location {
+    /// Create a new Location from page information
+    pub fn new(page_id: u32, page_offset: u16, object_size: u16) -> Self {
+        let packed = ((page_id as u64) << 32) | ((page_offset as u64) << 16) | (object_size as u64);
+        Location(packed)
+    }
+
+    /// Get the page ID
+    pub fn page_id(self) -> u32 { (self.0 >> 32) as u32 }
+
+    /// Get the offset within the page
+    pub fn page_offset(self) -> u16 { (self.0 >> 16) as u16 }
+
+    /// Get the object size
+    pub fn object_size(self) -> u16 { self.0 as u16 }
+
+    /// Get the raw u64 value
+    pub fn raw(self) -> u64 { self.0 }
+
+    /// Create from raw u64 value
+    pub fn from_raw(raw: u64) -> Self { Location(raw) }
+}
+
 #[derive(Debug)]
 pub struct Options {
     pub path: PathBuf,
