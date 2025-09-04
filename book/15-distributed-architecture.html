@@ -1,0 +1,1036 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js oranda-dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Distributed Architecture - rsketch</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="Documentation for rsketch - A Rust project template with gRPC and multi-language code generation">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" href="oranda-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "oranda-dark" : "oranda-dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('orandamdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('orandamdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('orandamdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('oranda-dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><a href="01-background.html"><strong aria-hidden="true">1.</strong> Background</a></li><li class="chapter-item expanded "><a href="02-architecture-overview.html"><strong aria-hidden="true">2.</strong> Architecture Overview</a></li><li class="chapter-item expanded "><a href="03-record-manager.html"><strong aria-hidden="true">3.</strong> Table Manager</a></li><li class="chapter-item expanded "><a href="04-core-storage-components.html"><strong aria-hidden="true">4.</strong> Core Storage Components</a></li><li class="chapter-item expanded "><a href="05-file-system-integration.html"><strong aria-hidden="true">5.</strong> File System Integration</a></li><li class="chapter-item expanded "><a href="06-performance-optimization.html"><strong aria-hidden="true">6.</strong> Performance Optimization</a></li><li class="chapter-item expanded "><a href="07-reliability-and-recovery.html"><strong aria-hidden="true">7.</strong> Reliability and Recovery</a></li><li class="chapter-item expanded "><a href="08-configuration-and-api.html"><strong aria-hidden="true">8.</strong> Configuration and API</a></li><li class="chapter-item expanded "><a href="09-monitoring-and-observability.html"><strong aria-hidden="true">9.</strong> Monitoring and Observability</a></li><li class="chapter-item expanded "><a href="10-deployment-and-operations.html"><strong aria-hidden="true">10.</strong> Deployment and Operations</a></li><li class="chapter-item expanded "><a href="11-security.html"><strong aria-hidden="true">11.</strong> Security</a></li><li class="chapter-item expanded "><a href="12-testing-strategy.html"><strong aria-hidden="true">12.</strong> Testing Strategy</a></li><li class="chapter-item expanded "><a href="13-future-enhancements.html"><strong aria-hidden="true">13.</strong> Future Enhancements</a></li><li class="chapter-item expanded "><a href="14-implementation-roadmap.html"><strong aria-hidden="true">14.</strong> Implementation Roadmap</a></li><li class="chapter-item expanded "><a href="15-distributed-architecture.html" class="active"><strong aria-hidden="true">15.</strong> Distributed Architecture</a></li><li class="chapter-item expanded "><a href="16-component-design.html"><strong aria-hidden="true">16.</strong> Component Design</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="oranda-dark">Oranda Dark</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="oranda-light">Oranda Light</button></li>
+
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">rsketch</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/crrow/rsketch" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/crrow/rsketch/edit/main/docs/src/15-distributed-architecture.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="分布式filestore集群架构"><a class="header" href="#分布式filestore集群架构">分布式FileStore集群架构</a></h1>
+<h2 id="概述"><a class="header" href="#概述">概述</a></h2>
+<p>当单机性能达到极限或需要高可用性时，FileStore需要演进为分布式集群架构。本文档详细描述分布式FileStore的设计考虑、架构方案和实施策略。</p>
+<h2 id="分布式演进策略"><a class="header" href="#分布式演进策略">分布式演进策略</a></h2>
+<h3 id="渐进式分布式路径"><a class="header" href="#渐进式分布式路径">渐进式分布式路径</a></h3>
+<pre><code>阶段1: 单机优化
+  单节点FileStore → 极致性能优化 → 垂直扩展极限
+
+阶段2: 主备复制  
+  主节点 + 备节点 → 高可用性 → 读写分离
+
+阶段3: 多节点分片
+  数据分片 → 水平扩展 → 分布式一致性
+
+阶段4: 多地多中心
+  跨地域部署 → 灾难恢复 → 全球化服务
+</code></pre>
+<h2 id="分布式架构设计"><a class="header" href="#分布式架构设计">分布式架构设计</a></h2>
+<h3 id="集群拓扑结构"><a class="header" href="#集群拓扑结构">集群拓扑结构</a></h3>
+<h4 id="三层分布式架构"><a class="header" href="#三层分布式架构">三层分布式架构</a></h4>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│                   客户端层 Client Layer                     │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
+│  │ 交易客户端1  │  │ 交易客户端2  │  │ 交易客户端N  │         │
+│  └─────────────┘  └─────────────┘  └─────────────┘         │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│              协调层 Coordination Layer                      │
+│  ┌─────────────────┐  ┌─────────────────┐                   │
+│  │ 负载均衡器       │  │ 服务发现        │                   │
+│  │ Latency-Aware   │  │ Consul/etcd     │                   │
+│  │ Load Balancer   │  │ Service Registry │                   │
+│  └─────────────────┘  └─────────────────┘                   │
+└─────────────────────────────────────────────────────────────┘
+                              │
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│                FileStore集群层 Cluster Layer                │
+│                                                             │
+│  ┌───────────────────┐  ┌───────────────────┐               │
+│  │   分片1 Shard 1    │  │   分片2 Shard 2    │               │
+│  │   (活跃订单)       │  │   (用户数据)       │               │
+│  │ ┌───────────────┐ │  │ ┌───────────────┐ │               │
+│  │ │ 主节点 Primary│ │  │ │ 主节点 Primary│ │               │
+│  │ │   (读写)      │ │  │ │   (读写)      │ │               │
+│  │ └───────────────┘ │  │ └───────────────┘ │               │
+│  │ ┌───────────────┐ │  │ ┌───────────────┐ │               │
+│  │ │ 副本1 Replica │ │  │ │ 副本1 Replica │ │               │
+│  │ │   (只读)      │ │  │ │   (只读)      │ │               │
+│  │ └───────────────┘ │  │ └───────────────┘ │               │
+│  │ ┌───────────────┐ │  │ ┌───────────────┐ │               │
+│  │ │ 副本2 Replica │ │  │ │ 副本2 Replica │ │               │
+│  │ │   (只读)      │ │  │ │   (只读)      │ │               │
+│  │ └───────────────┘ │  │ └───────────────┘ │               │
+│  └───────────────────┘  └───────────────────┘               │
+│                                                             │
+│  ┌───────────────────┐  ┌───────────────────┐               │
+│  │   分片3 Shard 3    │  │   分片N Shard N    │               │
+│  │   (历史数据)       │  │   (扩展数据)       │               │
+│  │     ......        │  │     ......        │               │
+│  └───────────────────┘  └───────────────────┘               │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3 id="核心分布式组件"><a class="header" href="#核心分布式组件">核心分布式组件</a></h3>
+<h4 id="1-分布式协调器-distributed-coordinator"><a class="header" href="#1-分布式协调器-distributed-coordinator">1. 分布式协调器 (Distributed Coordinator)</a></h4>
+<p><strong>职责</strong>:</p>
+<ul>
+<li>集群成员管理和健康监控</li>
+<li>Leader选举和故障转移</li>
+<li>全局配置管理和分发</li>
+<li>分片分配和重平衡</li>
+</ul>
+<p><strong>技术实现</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct DistributedCoordinator {
+    // 共识算法实现
+    raft_consensus: RaftConsensus,
+    
+    // 集群状态管理
+    cluster_state: Arc&lt;RwLock&lt;ClusterState&gt;&gt;,
+    
+    // 节点健康监控
+    health_monitor: HealthMonitor,
+    
+    // 分片管理器
+    shard_manager: ShardManager,
+}
+
+struct ClusterState {
+    // 活跃节点列表
+    active_nodes: HashMap&lt;NodeId, NodeInfo&gt;,
+    
+    // 分片分配表
+    shard_allocation: HashMap&lt;ShardId, ShardInfo&gt;,
+    
+    // 全局配置
+    global_config: GlobalConfig,
+}
+<span class="boring">}</span></code></pre></pre>
+<h4 id="2-智能负载均衡器-smart-load-balancer"><a class="header" href="#2-智能负载均衡器-smart-load-balancer">2. 智能负载均衡器 (Smart Load Balancer)</a></h4>
+<p><strong>设计原则</strong>:</p>
+<ul>
+<li><strong>延迟感知</strong>: 根据节点响应时间智能路由</li>
+<li><strong>负载感知</strong>: 避免热点节点过载</li>
+<li><strong>一致性哈希</strong>: 减少分片迁移影响</li>
+<li><strong>会话亲和</strong>: 相关请求路由到同一节点</li>
+</ul>
+<p><strong>路由策略</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum RoutingStrategy {
+    // 延迟最优路由
+    LatencyOptimal {
+        latency_threshold: Duration,
+        fallback_nodes: Vec&lt;NodeId&gt;,
+    },
+    
+    // 负载均衡路由
+    LoadBalanced {
+        weight_function: Box&lt;dyn Fn(&amp;NodeLoad) -&gt; f64&gt;,
+        max_load_threshold: f64,
+    },
+    
+    // 一致性哈希路由
+    ConsistentHash {
+        hash_ring: ConsistentHashRing,
+        replication_factor: u8,
+    },
+    
+    // 混合策略
+    Hybrid {
+        primary: Box&lt;RoutingStrategy&gt;,
+        fallback: Box&lt;RoutingStrategy&gt;,
+        switch_condition: Box&lt;dyn Fn(&amp;ClusterState) -&gt; bool&gt;,
+    },
+}
+<span class="boring">}</span></code></pre></pre>
+<h4 id="3-分片管理器-shard-manager"><a class="header" href="#3-分片管理器-shard-manager">3. 分片管理器 (Shard Manager)</a></h4>
+<p><strong>分片策略设计</strong>:</p>
+<p><strong>按数据热度分片</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum ShardStrategy {
+    DataTemperature {
+        // 热数据分片 - 高性能节点
+        hot_shard: ShardConfig {
+            node_type: NodeType::HighPerformance,
+            replication_factor: 3,
+            consistency: ConsistencyLevel::Strong,
+        },
+        
+        // 温数据分片 - 标准节点  
+        warm_shard: ShardConfig {
+            node_type: NodeType::Standard,
+            replication_factor: 2,
+            consistency: ConsistencyLevel::Eventual,
+        },
+        
+        // 冷数据分片 - 大容量节点
+        cold_shard: ShardConfig {
+            node_type: NodeType::HighCapacity,
+            replication_factor: 1,
+            consistency: ConsistencyLevel::Eventual,
+        },
+    },
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>按业务维度分片</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum BusinessSharding {
+    // 按用户组分片
+    UserGroup {
+        vip_users: ShardId,      // VIP用户专用分片
+        regular_users: ShardId,  // 普通用户共享分片
+        inactive_users: ShardId, // 非活跃用户归档分片
+    },
+    
+    // 按数据类型分片
+    DataType {
+        orders_shard: ShardId,   // 订单数据分片
+        users_shard: ShardId,    // 用户数据分片
+        history_shard: ShardId,  // 历史数据分片
+    },
+    
+    // 按地理位置分片
+    Geographic {
+        region_shards: HashMap&lt;Region, ShardId&gt;,
+        cross_region_replication: bool,
+    },
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="一致性和可用性设计"><a class="header" href="#一致性和可用性设计">一致性和可用性设计</a></h2>
+<h3 id="cap定理权衡"><a class="header" href="#cap定理权衡">CAP定理权衡</a></h3>
+<p><strong>分层一致性模型</strong>:</p>
+<pre><code>强一致性层 (CP系统):
+├── 订单核心数据 (订单状态、账户余额)
+├── 使用Raft共识算法
+├── 同步复制到多数节点
+└── 线性化读写保证
+
+最终一致性层 (AP系统):
+├── 用户配置数据 (个人设置、偏好)
+├── 异步复制优化性能  
+├── 冲突检测和解决
+└── 读写分离架构
+
+混合一致性层:
+├── 写入时强一致性
+├── 读取时最终一致性
+├── 可配置的一致性级别
+└── 业务语义驱动的选择
+</code></pre>
+<h3 id="分布式事务处理"><a class="header" href="#分布式事务处理">分布式事务处理</a></h3>
+<h4 id="两阶段提交优化-enhanced-2pc"><a class="header" href="#两阶段提交优化-enhanced-2pc">两阶段提交优化 (Enhanced 2PC)</a></h4>
+<p><strong>传统2PC问题</strong>:</p>
+<ul>
+<li>阻塞问题：协调者故障导致参与者阻塞</li>
+<li>性能问题：多轮网络通信开销大</li>
+<li>可用性问题：任一节点故障影响全局事务</li>
+</ul>
+<p><strong>优化策略</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct Enhanced2PC {
+    // 协调者池，避免单点故障
+    coordinator_pool: Vec&lt;CoordinatorNode&gt;,
+    
+    // 异步并行提交
+    parallel_commit: bool,
+    
+    // 事务超时和快速失败
+    transaction_timeout: Duration,
+    
+    // 预写日志优化
+    optimistic_logging: bool,
+}
+
+impl Enhanced2PC {
+    async fn commit_transaction(&amp;self, txn: Transaction) -&gt; Result&lt;CommitResult&gt; {
+        // 第0阶段：事务预检查和优化
+        self.precheck_transaction(&amp;txn).await?;
+        
+        // 第1阶段：并行准备阶段
+        let prepare_futures: Vec&lt;_&gt; = txn.participants
+            .iter()
+            .map(|participant| self.prepare_participant(participant))
+            .collect();
+        
+        let prepare_results = join_all(prepare_futures).await;
+        
+        // 快速决策：任一失败则立即中止
+        if prepare_results.iter().any(|r| r.is_err()) {
+            self.parallel_abort(&amp;txn).await;
+            return Err(TransactionAborted);
+        }
+        
+        // 第2阶段：并行提交阶段
+        let commit_futures: Vec&lt;_&gt; = txn.participants
+            .iter()
+            .map(|participant| self.commit_participant(participant))
+            .collect();
+            
+        let commit_results = join_all(commit_futures).await;
+        Ok(CommitResult::from(commit_results))
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h4 id="saga模式支持"><a class="header" href="#saga模式支持">Saga模式支持</a></h4>
+<p><strong>长事务处理</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct SagaTransaction {
+    // 事务步骤链
+    steps: Vec&lt;SagaStep&gt;,
+    
+    // 补偿操作
+    compensations: Vec&lt;CompensationStep&gt;,
+    
+    // 执行策略
+    execution_strategy: SagaStrategy,
+}
+
+enum SagaStrategy {
+    // 前向恢复：重试失败步骤
+    ForwardRecovery {
+        max_retries: u32,
+        retry_backoff: Duration,
+    },
+    
+    // 后向恢复：执行补偿操作  
+    BackwardRecovery {
+        compensation_timeout: Duration,
+    },
+    
+    // 混合策略
+    Hybrid {
+        retry_count_threshold: u32,
+        switch_to_compensation: bool,
+    },
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="分布式锁机制"><a class="header" href="#分布式锁机制">分布式锁机制</a></h3>
+<h4 id="基于raft的分布式锁"><a class="header" href="#基于raft的分布式锁">基于Raft的分布式锁</a></h4>
+<p><strong>设计特点</strong>:</p>
+<ul>
+<li><strong>强一致性</strong>: 基于Raft共识算法</li>
+<li><strong>高可用性</strong>: 容忍少数节点故障</li>
+<li><strong>死锁检测</strong>: 全局死锁检测和解决</li>
+<li><strong>锁租约</strong>: 防止死锁和僵尸锁</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct DistributedLockManager {
+    // Raft共识集群
+    raft_cluster: RaftCluster,
+    
+    // 锁状态存储
+    lock_store: Arc&lt;RwLock&lt;HashMap&lt;LockId, LockInfo&gt;&gt;&gt;,
+    
+    // 死锁检测器
+    deadlock_detector: DeadlockDetector,
+    
+    // 锁租约管理
+    lease_manager: LeaseManager,
+}
+
+struct LockInfo {
+    lock_id: LockId,
+    owner: NodeId,
+    acquired_at: Timestamp,
+    expires_at: Timestamp,
+    lock_type: LockType, // 读锁/写锁
+    waiters: Vec&lt;WaiterInfo&gt;,
+}
+
+impl DistributedLockManager {
+    async fn acquire_lock(&amp;self, request: LockRequest) -&gt; Result&lt;LockHandle&gt; {
+        // 1. 提交锁请求到Raft集群
+        let proposal = LockProposal {
+            lock_id: request.lock_id,
+            requester: request.node_id,
+            lock_type: request.lock_type,
+            timeout: request.timeout,
+        };
+        
+        // 2. 等待Raft共识
+        let consensus_result = self.raft_cluster
+            .propose(proposal)
+            .await?;
+            
+        // 3. 检查死锁
+        if self.deadlock_detector.would_cause_deadlock(&amp;request) {
+            return Err(DeadlockDetected);
+        }
+        
+        // 4. 成功获取锁
+        Ok(LockHandle::new(request.lock_id, consensus_result.term))
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="分布式存储架构"><a class="header" href="#分布式存储架构">分布式存储架构</a></h2>
+<h3 id="数据分片和复制"><a class="header" href="#数据分片和复制">数据分片和复制</a></h3>
+<h4 id="一致性哈希分片"><a class="header" href="#一致性哈希分片">一致性哈希分片</a></h4>
+<p><strong>设计优势</strong>:</p>
+<ul>
+<li><strong>负载均衡</strong>: 数据均匀分布到各节点</li>
+<li><strong>弹性扩容</strong>: 添加/删除节点时最小化数据迁移</li>
+<li><strong>容错性</strong>: 单节点故障不影响全局服务</li>
+<li><strong>局部性</strong>: 相关数据倾向于分布到相近节点</li>
+</ul>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct ConsistentHashRing {
+    // 虚拟节点环
+    virtual_nodes: BTreeMap&lt;u64, VirtualNode&gt;,
+    
+    // 物理节点映射
+    physical_nodes: HashMap&lt;NodeId, PhysicalNode&gt;,
+    
+    // 复制因子
+    replication_factor: u8,
+    
+    // 哈希函数
+    hash_function: Box&lt;dyn HashFunction&gt;,
+}
+
+struct VirtualNode {
+    hash: u64,
+    physical_node: NodeId,
+    node_weight: f64,
+}
+
+impl ConsistentHashRing {
+    fn get_nodes_for_key(&amp;self, key: &amp;[u8]) -&gt; Vec&lt;NodeId&gt; {
+        let key_hash = self.hash_function.hash(key);
+        let mut result = Vec::new();
+        
+        // 在环上顺时针查找节点
+        let mut current_hash = key_hash;
+        let mut seen_physical_nodes = HashSet::new();
+        
+        while result.len() &lt; self.replication_factor as usize {
+            if let Some((_, virtual_node)) = self.virtual_nodes
+                .range(current_hash..)
+                .next()
+                .or_else(|| self.virtual_nodes.iter().next()) {
+                
+                if !seen_physical_nodes.contains(&amp;virtual_node.physical_node) {
+                    result.push(virtual_node.physical_node);
+                    seen_physical_nodes.insert(virtual_node.physical_node);
+                }
+                
+                current_hash = virtual_node.hash + 1;
+            } else {
+                break;
+            }
+        }
+        
+        result
+    }
+    
+    // 节点添加时的数据迁移计划
+    fn plan_migration_for_new_node(&amp;self, new_node: NodeId) -&gt; MigrationPlan {
+        let mut migration_plan = MigrationPlan::new();
+        
+        // 计算新节点的虚拟节点位置
+        let virtual_nodes = self.generate_virtual_nodes(new_node);
+        
+        for virtual_node in virtual_nodes {
+            // 找到需要迁移的数据范围
+            let predecessor = self.find_predecessor(virtual_node.hash);
+            let migration_range = HashRange {
+                start: predecessor.hash,
+                end: virtual_node.hash,
+            };
+            
+            migration_plan.add_migration(
+                predecessor.physical_node,
+                new_node,
+                migration_range,
+            );
+        }
+        
+        migration_plan
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h4 id="多级复制策略"><a class="header" href="#多级复制策略">多级复制策略</a></h4>
+<p><strong>复制层次</strong>:</p>
+<pre><code>同步复制层 (强一致性):
+├── 同机房内2-3个副本
+├── 同步写入所有副本
+├── 多数派确认后返回
+└── 适用于关键业务数据
+
+异步复制层 (最终一致性):
+├── 跨机房/地域副本
+├── 异步批量复制
+├── 冲突检测和解决
+└── 适用于备份和灾难恢复
+
+分层复制策略:
+├── 热数据：3副本同步 + 1副本异步
+├── 温数据：2副本同步 + 1副本异步  
+├── 冷数据：1副本本地 + 1副本远程
+└── 动态调整复制策略
+</code></pre>
+<h3 id="分布式查询处理"><a class="header" href="#分布式查询处理">分布式查询处理</a></h3>
+<h4 id="查询路由和优化"><a class="header" href="#查询路由和优化">查询路由和优化</a></h4>
+<p><strong>智能查询路由</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct DistributedQueryExecutor {
+    // 查询优化器
+    query_optimizer: QueryOptimizer,
+    
+    // 分片路由器
+    shard_router: ShardRouter,
+    
+    // 结果聚合器
+    result_aggregator: ResultAggregator,
+    
+    // 查询缓存
+    query_cache: Arc&lt;QueryCache&gt;,
+}
+
+impl DistributedQueryExecutor {
+    async fn execute_query(&amp;self, query: Query) -&gt; Result&lt;QueryResult&gt; {
+        // 1. 查询优化和计划生成
+        let execution_plan = self.query_optimizer.optimize(query)?;
+        
+        // 2. 确定涉及的分片
+        let target_shards = self.shard_router
+            .resolve_shards(&amp;execution_plan)?;
+        
+        // 3. 检查查询缓存
+        if let Some(cached_result) = self.query_cache.get(&amp;execution_plan.cache_key()) {
+            return Ok(cached_result);
+        }
+        
+        // 4. 并行执行子查询
+        let shard_queries: Vec&lt;_&gt; = target_shards
+            .into_iter()
+            .map(|shard| self.execute_shard_query(shard, &amp;execution_plan))
+            .collect();
+            
+        let shard_results = join_all(shard_queries).await;
+        
+        // 5. 结果聚合和后处理
+        let final_result = self.result_aggregator
+            .aggregate(shard_results, &amp;execution_plan)?;
+            
+        // 6. 缓存查询结果
+        self.query_cache.put(execution_plan.cache_key(), &amp;final_result);
+        
+        Ok(final_result)
+    }
+    
+    async fn execute_shard_query(&amp;self, shard: ShardInfo, plan: &amp;ExecutionPlan) -&gt; Result&lt;ShardResult&gt; {
+        // 选择最优节点执行查询
+        let optimal_node = self.select_optimal_node(&amp;shard).await?;
+        
+        // 执行分片查询
+        let shard_query = plan.extract_shard_query(&amp;shard);
+        optimal_node.execute_query(shard_query).await
+    }
+    
+    async fn select_optimal_node(&amp;self, shard: &amp;ShardInfo) -&gt; Result&lt;NodeId&gt; {
+        let candidates = shard.replica_nodes();
+        
+        // 综合考虑延迟、负载、健康状态
+        let mut best_node = None;
+        let mut best_score = f64::MIN;
+        
+        for node in candidates {
+            let node_metrics = self.get_node_metrics(node).await?;
+            let score = self.calculate_node_score(&amp;node_metrics);
+            
+            if score &gt; best_score {
+                best_score = score;
+                best_node = Some(node);
+            }
+        }
+        
+        best_node.ok_or(NoAvailableNode)
+    }
+    
+    fn calculate_node_score(&amp;self, metrics: &amp;NodeMetrics) -&gt; f64 {
+        // 综合评分算法
+        let latency_score = 1.0 / (metrics.avg_latency.as_millis() as f64 + 1.0);
+        let load_score = 1.0 - metrics.cpu_usage;
+        let health_score = if metrics.is_healthy { 1.0 } else { 0.0 };
+        
+        // 加权平均
+        latency_score * 0.4 + load_score * 0.4 + health_score * 0.2
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="容错和恢复机制"><a class="header" href="#容错和恢复机制">容错和恢复机制</a></h2>
+<h3 id="故障检测体系"><a class="header" href="#故障检测体系">故障检测体系</a></h3>
+<p><strong>多层次健康监控</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct ClusterHealthMonitor {
+    // 节点级健康检查
+    node_monitors: HashMap&lt;NodeId, NodeHealthMonitor&gt;,
+    
+    // 服务级健康检查  
+    service_monitors: HashMap&lt;ServiceId, ServiceHealthMonitor&gt;,
+    
+    // 网络分区检测
+    partition_detector: PartitionDetector,
+    
+    // 异常检测器
+    anomaly_detector: AnomalyDetector,
+}
+
+struct NodeHealthMonitor {
+    // 心跳检测
+    heartbeat_checker: HeartbeatChecker,
+    
+    // 性能指标监控
+    metrics_monitor: MetricsMonitor,
+    
+    // 业务功能探测
+    business_probe: BusinessProbe,
+}
+
+impl ClusterHealthMonitor {
+    async fn monitor_cluster_health(&amp;self) -&gt; ClusterHealthReport {
+        let mut health_report = ClusterHealthReport::new();
+        
+        // 并行检查所有节点健康状态
+        let node_health_futures: Vec&lt;_&gt; = self.node_monitors
+            .iter()
+            .map(|(node_id, monitor)| async move {
+                let health = monitor.check_health().await;
+                (*node_id, health)
+            })
+            .collect();
+            
+        let node_health_results = join_all(node_health_futures).await;
+        
+        for (node_id, health) in node_health_results {
+            health_report.add_node_health(node_id, health);
+            
+            // 检测节点异常模式
+            if let Some(anomaly) = self.anomaly_detector.detect(node_id, &amp;health) {
+                health_report.add_anomaly(anomaly);
+            }
+        }
+        
+        // 检测网络分区
+        if let Some(partition) = self.partition_detector.detect_partition().await {
+            health_report.add_partition(partition);
+        }
+        
+        health_report
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="自动故障恢复"><a class="header" href="#自动故障恢复">自动故障恢复</a></h3>
+<p><strong>故障恢复策略</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>enum RecoveryStrategy {
+    // 节点重启恢复
+    NodeRestart {
+        max_restart_attempts: u32,
+        restart_backoff: Duration,
+    },
+    
+    // 服务迁移恢复  
+    ServiceMigration {
+        target_node_selection: NodeSelectionStrategy,
+        migration_timeout: Duration,
+    },
+    
+    // 分片重新分配
+    ShardReallocation {
+        reallocation_policy: ReallocationPolicy,
+        data_migration_strategy: MigrationStrategy,
+    },
+    
+    // 降级服务
+    ServiceDegradation {
+        degraded_service_level: ServiceLevel,
+        auto_recovery_condition: RecoveryCondition,
+    },
+}
+
+struct AutoRecoveryManager {
+    recovery_strategies: HashMap&lt;FailureType, RecoveryStrategy&gt;,
+    recovery_executor: RecoveryExecutor,
+    recovery_history: RecoveryHistory,
+}
+
+impl AutoRecoveryManager {
+    async fn handle_failure(&amp;self, failure: ClusterFailure) -&gt; RecoveryResult {
+        // 1. 确定故障类型和影响范围
+        let failure_analysis = self.analyze_failure(&amp;failure);
+        
+        // 2. 选择恢复策略
+        let strategy = self.select_recovery_strategy(&amp;failure_analysis);
+        
+        // 3. 执行恢复操作
+        let recovery_result = self.recovery_executor
+            .execute_recovery(&amp;strategy, &amp;failure)
+            .await?;
+            
+        // 4. 记录恢复历史
+        self.recovery_history.record(RecoveryRecord {
+            failure,
+            strategy: strategy.clone(),
+            result: recovery_result.clone(),
+            timestamp: SystemTime::now(),
+        });
+        
+        // 5. 学习和优化
+        self.learn_from_recovery(&amp;recovery_result);
+        
+        Ok(recovery_result)
+    }
+    
+    fn learn_from_recovery(&amp;mut self, result: &amp;RecoveryResult) {
+        // 基于恢复效果调整策略
+        if result.is_successful() &amp;&amp; result.recovery_time &lt; Duration::from_secs(30) {
+            // 成功的快速恢复，增加该策略的优先级
+            self.increase_strategy_priority(&amp;result.strategy);
+        } else if result.recovery_time &gt; Duration::from_minutes(5) {
+            // 恢复时间过长，降低策略优先级
+            self.decrease_strategy_priority(&amp;result.strategy);
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="灾难恢复设计"><a class="header" href="#灾难恢复设计">灾难恢复设计</a></h3>
+<p><strong>多层灾备架构</strong>:</p>
+<pre><code>本地容灾 (RTO &lt; 30秒, RPO &lt; 1秒):
+├── 同机房多节点部署
+├── 实时数据同步
+├── 自动故障转移
+└── 热备份节点
+
+异地容灾 (RTO &lt; 5分钟, RPO &lt; 10秒):
+├── 跨数据中心部署
+├── 异步数据复制
+├── 手动/自动切换
+└── 温备份集群
+
+极端灾难 (RTO &lt; 30分钟, RPO &lt; 1分钟):
+├── 多地域部署
+├── 定期全量备份
+├── 灾难恢复演练
+└── 冷备份存储
+</code></pre>
+<h2 id="性能优化策略"><a class="header" href="#性能优化策略">性能优化策略</a></h2>
+<h3 id="分布式性能调优"><a class="header" href="#分布式性能调优">分布式性能调优</a></h3>
+<h4 id="网络优化"><a class="header" href="#网络优化">网络优化</a></h4>
+<ul>
+<li><strong>批量操作</strong>: 减少网络往返次数</li>
+<li><strong>数据压缩</strong>: 减少网络传输量</li>
+<li><strong>连接池</strong>: 复用网络连接</li>
+<li><strong>异步I/O</strong>: 提高网络并发性</li>
+</ul>
+<h4 id="缓存策略"><a class="header" href="#缓存策略">缓存策略</a></h4>
+<ul>
+<li><strong>多级缓存</strong>: L1(节点本地) → L2(集群共享) → L3(持久化)</li>
+<li><strong>智能预取</strong>: 预测热数据并预加载</li>
+<li><strong>缓存一致性</strong>: 分布式缓存的数据一致性保证</li>
+<li><strong>缓存分区</strong>: 避免缓存热点和争用</li>
+</ul>
+<h4 id="负载均衡优化"><a class="header" href="#负载均衡优化">负载均衡优化</a></h4>
+<ul>
+<li><strong>延迟感知</strong>: 路由到最低延迟节点</li>
+<li><strong>负载感知</strong>: 避免热点节点过载</li>
+<li><strong>会话粘性</strong>: 相关请求路由到同一节点</li>
+<li><strong>健康感知</strong>: 避免故障或不健康节点</li>
+</ul>
+<h3 id="可观测性和监控"><a class="header" href="#可观测性和监控">可观测性和监控</a></h3>
+<h4 id="分布式追踪"><a class="header" href="#分布式追踪">分布式追踪</a></h4>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct DistributedTracing {
+    // 追踪上下文传播
+    trace_propagator: TracePropagator,
+    
+    // 跨度收集器
+    span_collector: SpanCollector,
+    
+    // 追踪分析器
+    trace_analyzer: TraceAnalyzer,
+}
+
+// 请求追踪示例
+impl DistributedQueryExecutor {
+    async fn execute_query_with_tracing(&amp;self, query: Query) -&gt; Result&lt;QueryResult&gt; {
+        // 创建根追踪跨度
+        let root_span = self.tracer.start_span("distributed_query");
+        let trace_context = root_span.context();
+        
+        // 查询优化跨度
+        let optimization_span = self.tracer.start_span_with_context(
+            "query_optimization", 
+            &amp;trace_context
+        );
+        let execution_plan = self.query_optimizer.optimize(query)?;
+        optimization_span.end();
+        
+        // 分片查询跨度
+        let shard_queries: Vec&lt;_&gt; = target_shards
+            .into_iter()
+            .map(|shard| {
+                let shard_span = self.tracer.start_span_with_context(
+                    &amp;format!("shard_query_{}", shard.id),
+                    &amp;trace_context
+                );
+                self.execute_shard_query_traced(shard, &amp;execution_plan, shard_span)
+            })
+            .collect();
+            
+        let results = join_all(shard_queries).await;
+        
+        // 结果聚合跨度
+        let aggregation_span = self.tracer.start_span_with_context(
+            "result_aggregation", 
+            &amp;trace_context
+        );
+        let final_result = self.result_aggregator.aggregate(results, &amp;execution_plan)?;
+        aggregation_span.end();
+        
+        root_span.end();
+        Ok(final_result)
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h4 id="性能指标体系"><a class="header" href="#性能指标体系">性能指标体系</a></h4>
+<pre><code>系统级指标:
+├── CPU使用率、内存使用率
+├── 网络带宽、磁盘I/O
+├── 系统负载、进程状态
+└── 硬件健康状态
+
+应用级指标:
+├── 请求延迟分布 (P50/P95/P99)
+├── 请求吞吐量 (QPS/TPS)
+├── 错误率和成功率
+└── 业务功能可用性
+
+集群级指标:
+├── 节点健康状态
+├── 分片负载均衡度
+├── 数据一致性状态
+└── 故障恢复时间
+</code></pre>
+<h2 id="总结"><a class="header" href="#总结">总结</a></h2>
+<p>分布式FileStore的设计需要在性能、一致性、可用性之间找到最佳平衡点。通过渐进式演进策略，可以从单机高性能版本逐步发展为支持大规模部署的分布式集群系统。</p>
+<p>关键设计原则：</p>
+<ul>
+<li><strong>渐进式演进</strong>: 避免过早的分布式复杂性</li>
+<li><strong>分层一致性</strong>: 不同业务数据采用不同的一致性保证</li>
+<li><strong>智能路由</strong>: 延迟感知和负载感知的请求路由</li>
+<li><strong>自动化运维</strong>: 故障自动检测、恢复和自愈能力</li>
+<li><strong>可观测性</strong>: 完整的监控、追踪和告警体系</li>
+</ul>
+<p>这个分布式架构为FileStore提供了可扩展的高可用解决方案，能够满足大规模交易系统的严格要求。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="14-implementation-roadmap.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="16-component-design.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="14-implementation-roadmap.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="16-component-design.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

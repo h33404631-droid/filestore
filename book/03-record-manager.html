@@ -1,0 +1,1481 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js oranda-dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Table Manager - rsketch</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="Documentation for rsketch - A Rust project template with gRPC and multi-language code generation">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" href="oranda-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "oranda-dark" : "oranda-dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('orandamdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('orandamdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('orandamdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('oranda-dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><a href="01-background.html"><strong aria-hidden="true">1.</strong> Background</a></li><li class="chapter-item expanded "><a href="02-architecture-overview.html"><strong aria-hidden="true">2.</strong> Architecture Overview</a></li><li class="chapter-item expanded "><a href="03-record-manager.html" class="active"><strong aria-hidden="true">3.</strong> Table Manager</a></li><li class="chapter-item expanded "><a href="04-core-storage-components.html"><strong aria-hidden="true">4.</strong> Core Storage Components</a></li><li class="chapter-item expanded "><a href="05-file-system-integration.html"><strong aria-hidden="true">5.</strong> File System Integration</a></li><li class="chapter-item expanded "><a href="06-performance-optimization.html"><strong aria-hidden="true">6.</strong> Performance Optimization</a></li><li class="chapter-item expanded "><a href="07-reliability-and-recovery.html"><strong aria-hidden="true">7.</strong> Reliability and Recovery</a></li><li class="chapter-item expanded "><a href="08-configuration-and-api.html"><strong aria-hidden="true">8.</strong> Configuration and API</a></li><li class="chapter-item expanded "><a href="09-monitoring-and-observability.html"><strong aria-hidden="true">9.</strong> Monitoring and Observability</a></li><li class="chapter-item expanded "><a href="10-deployment-and-operations.html"><strong aria-hidden="true">10.</strong> Deployment and Operations</a></li><li class="chapter-item expanded "><a href="11-security.html"><strong aria-hidden="true">11.</strong> Security</a></li><li class="chapter-item expanded "><a href="12-testing-strategy.html"><strong aria-hidden="true">12.</strong> Testing Strategy</a></li><li class="chapter-item expanded "><a href="13-future-enhancements.html"><strong aria-hidden="true">13.</strong> Future Enhancements</a></li><li class="chapter-item expanded "><a href="14-implementation-roadmap.html"><strong aria-hidden="true">14.</strong> Implementation Roadmap</a></li><li class="chapter-item expanded "><a href="15-distributed-architecture.html"><strong aria-hidden="true">15.</strong> Distributed Architecture</a></li><li class="chapter-item expanded "><a href="16-component-design.html"><strong aria-hidden="true">16.</strong> Component Design</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="oranda-dark">Oranda Dark</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="oranda-light">Oranda Light</button></li>
+
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">rsketch</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/crrow/rsketch" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/crrow/rsketch/edit/main/docs/src/03-record-manager.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="table-manager"><a class="header" href="#table-manager">Table Manager</a></h1>
+<h2 id="table-of-contents"><a class="header" href="#table-of-contents">Table of Contents</a></h2>
+<ul>
+<li><a href="#core-concepts">Core Concepts</a>
+<ul>
+<li><a href="#what-is-a-table">What is a Table?</a></li>
+<li><a href="#what-are-records">What are Records?</a></li>
+</ul>
+</li>
+<li><a href="#table-manager-architecture">Table Manager Architecture</a></li>
+<li><a href="#table-organization">Table Organization</a>
+<ul>
+<li><a href="#table-structure">Table Structure</a></li>
+<li><a href="#record-layout">Record Layout</a></li>
+</ul>
+</li>
+<li><a href="#record-operations">Record Operations</a>
+<ul>
+<li><a href="#storage-and-addressing">Storage and Addressing</a></li>
+<li><a href="#record-ids-snowflake-format">Record IDs (Snowflake Format)</a></li>
+<li><a href="#record-lifecycle">Record Lifecycle</a></li>
+</ul>
+</li>
+<li><a href="#index-system">Index System</a>
+<ul>
+<li><a href="#primary-index">Primary Index</a></li>
+<li><a href="#secondary-indexes">Secondary Indexes</a></li>
+<li><a href="#index-storage">Index Storage</a></li>
+<li><a href="#query-processing">Query Processing</a></li>
+</ul>
+</li>
+<li><a href="#advanced-features">Advanced Features</a>
+<ul>
+<li><a href="#multi-version-concurrency-mvcc">Multi-Version Concurrency (MVCC)</a></li>
+<li><a href="#schema-management">Schema Management</a></li>
+<li><a href="#zero-copy-storage">Zero-Copy Storage</a></li>
+</ul>
+</li>
+<li><a href="#performance">Performance</a>
+<ul>
+<li><a href="#data-types-and-storage">Data Types and Storage</a></li>
+<li><a href="#performance-comparison">Performance Comparison</a></li>
+<li><a href="#optimization-strategies">Optimization Strategies</a></li>
+</ul>
+</li>
+<li><a href="#page-aware-storage-design">Page-Aware Storage Design</a>
+<ul>
+<li><a href="#readwrite-amplification-problem">Read/Write Amplification Problem</a></li>
+<li><a href="#page-aligned-record-layout">Page-Aligned Record Layout</a></li>
+<li><a href="#batch-operations">Batch Operations</a></li>
+<li><a href="#hot-page-management">Hot Page Management</a></li>
+</ul>
+</li>
+<li><a href="#data-integrity">Data Integrity</a></li>
+<li><a href="#catalog-system">Catalog System</a>
+<ul>
+<li><a href="#catalog-structure">Catalog Structure</a></li>
+<li><a href="#catalog-operations">Catalog Operations</a></li>
+<li><a href="#catalog-persistence">Catalog Persistence</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="core-concepts"><a class="header" href="#core-concepts">Core Concepts</a></h2>
+<h3 id="what-is-a-table"><a class="header" href="#what-is-a-table">What is a Table?</a></h3>
+<p>A <strong>table</strong> is the primary organization unit in this storage engine. It's a specialized container that stores one type of business data with optimal performance.</p>
+<p><strong>Key Characteristics</strong>:</p>
+<ul>
+<li><strong>Single Data Type</strong>: Each table stores only one kind of business object (orders, users, transactions)</li>
+<li><strong>Fixed Record Size</strong>: All records in a table have the same size, determined at table creation</li>
+<li><strong>Memory-Mapped</strong>: Direct access to data without serialization overhead</li>
+<li><strong>High Performance</strong>: Optimized for sub-millisecond access times</li>
+</ul>
+<p><strong>Table Examples</strong>:</p>
+<ul>
+<li><strong>Orders Table</strong>: 512 bytes per record - trading orders with symbol, quantity, price</li>
+<li><strong>Users Table</strong>: 256 bytes per record - user profiles and account information</li>
+<li><strong>Logs Table</strong>: 128 bytes per record - system events and audit trails</li>
+<li><strong>Config Table</strong>: 1024 bytes per record - complex configuration settings</li>
+</ul>
+<h3 id="what-are-records"><a class="header" href="#what-are-records">What are Records?</a></h3>
+<p><strong>Records</strong> are the individual data entries stored within tables. Each record represents one business entity.</p>
+<p><strong>Record Characteristics</strong>:</p>
+<ul>
+<li><strong>Structured Data</strong>: Fixed schema with typed fields (like a programming struct)</li>
+<li><strong>Unique Identity</strong>: Every record has a Snowflake ID for direct access</li>
+<li><strong>Binary Storage</strong>: Data stored in CPU-native format for maximum speed</li>
+<li><strong>Atomic Operations</strong>: Read or write entire records without corruption</li>
+</ul>
+<p><strong>Why This Design Works</strong>:</p>
+<ul>
+<li><strong>vs Traditional Database</strong>: No SQL parsing, direct memory access</li>
+<li><strong>vs JSON/XML</strong>: Binary format is 100x faster than text parsing</li>
+<li><strong>vs Key-Value Store</strong>: Structured schema enables efficient queries</li>
+<li><strong>vs Document Store</strong>: Fixed size eliminates memory fragmentation</li>
+</ul>
+<p><strong>Performance Advantage</strong>:</p>
+<pre><code>Traditional Database:
+Request → Parse SQL → Plan Query → Buffer Pool → Disk I/O → Response
+         ↑ 5-20ms of overhead ↑
+
+Table Manager:
+Request → Table Lookup → Direct Memory Access → Response  
+         ↑ &lt;1ms total time ↑
+</code></pre>
+<h2 id="table-manager-architecture"><a class="header" href="#table-manager-architecture">Table Manager Architecture</a></h2>
+<p>The Table Manager is the central component that handles all table and record operations. It replaces the traditional "Record Manager" concept with a more focused, table-centric approach.</p>
+<p><strong>Core Design Principle</strong>:
+Instead of managing records independently, the Table Manager treats each table as a self-contained unit that knows how to manage its own records efficiently.</p>
+<p><strong>Architecture Components</strong>:</p>
+<pre><code>Table Manager
+├── Table Registry          # Active tables lookup
+├── Storage Engine         # Memory mapping and I/O
+├── Transaction Manager    # MVCC and concurrent access  
+├── Catalog Service       # Schema and metadata
+└── Index Manager         # Secondary indexes
+</code></pre>
+<p><strong>Table Manager Responsibilities</strong>:</p>
+<ul>
+<li><strong>Table Lifecycle</strong>: Create, drop, and manage table instances</li>
+<li><strong>Record Operations</strong>: Insert, update, delete, query records within tables</li>
+<li><strong>Schema Management</strong>: Validate records against table schemas</li>
+<li><strong>Memory Management</strong>: Allocate and track record slots within tables</li>
+<li><strong>Concurrency Control</strong>: Coordinate MVCC versions and transactions</li>
+<li><strong>Performance Optimization</strong>: Cache hot data, batch operations</li>
+</ul>
+<p><strong>Key Benefits of Table-Centric Design</strong>:</p>
+<ul>
+<li><strong>Simplified Architecture</strong>: Fewer abstraction layers, clearer responsibilities</li>
+<li><strong>Better Performance</strong>: Direct table → storage mapping</li>
+<li><strong>Type Safety</strong>: Each table enforces its record schema</li>
+<li><strong>Locality</strong>: Related records (same type) stored together</li>
+<li><strong>Scalability</strong>: Tables can be independently optimized and managed</li>
+</ul>
+<h2 id="table-organization"><a class="header" href="#table-organization">Table Organization</a></h2>
+<h3 id="table-structure"><a class="header" href="#table-structure">Table Structure</a></h3>
+<p>Each table is a self-contained storage unit optimized for a specific record type.</p>
+<p><strong>Table Design Principles</strong>:</p>
+<ul>
+<li><strong>Homogeneous Records</strong>: All records in a table have identical structure and size</li>
+<li><strong>Contiguous Storage</strong>: Records stored sequentially in memory-mapped files</li>
+<li><strong>Fixed Allocation</strong>: Record slots pre-allocated for predictable performance</li>
+<li><strong>Type Safety</strong>: Schema enforced at the table level</li>
+</ul>
+<p><strong>Table Components</strong>:</p>
+<pre><code>Table Structure:
+┌─────────────────────────────────────────────┐
+│ Table Header (metadata, schema, stats)     │
+├─────────────────────────────────────────────┤
+│ Allocation Bitmap (track free/used slots)  │  
+├─────────────────────────────────────────────┤
+│ Record Slot 0                              │
+├─────────────────────────────────────────────┤
+│ Record Slot 1                              │
+├─────────────────────────────────────────────┤
+│ ...                                        │
+├─────────────────────────────────────────────┤
+│ Record Slot N                              │
+└─────────────────────────────────────────────┘
+</code></pre>
+<h3 id="record-layout"><a class="header" href="#record-layout">Record Layout</a></h3>
+<p>Every record within a table follows the same binary layout:</p>
+<pre><code>Record Structure (size varies by table):
+┌─────────────────────────────────────────────┐
+│ Record Header (32 bytes)                   │  ← Metadata
+├─────────────────────────────────────────────┤
+│ Application Data (table-specific size)     │  ← Your data
+├─────────────────────────────────────────────┤
+│ Record Footer (32 bytes)                   │  ← Integrity
+└─────────────────────────────────────────────┘
+</code></pre>
+<p><strong>Record Header (32 bytes)</strong>:</p>
+<pre><code>Header Layout:
+├── Record ID (8 bytes)           # Unique Snowflake ID
+├── Schema Version (4 bytes)      # Handle schema evolution  
+├── Data Length (4 bytes)         # Actual payload size
+├── Status Flags (4 bytes)        # ACTIVE, DELETED, etc.
+├── Timestamp (8 bytes)           # Last modification time
+├── Header Checksum (4 bytes)     # Header integrity check
+</code></pre>
+<p><strong>Table Size Examples (Page-Aware Design)</strong>:</p>
+<pre><code>Table Type    | Record Size | Records/Page | Max Records | Memory Usage | Page Efficiency
+--------------|-------------|--------------|-------------|--------------|----------------
+Users         | 256B        | 16 records   | 4M records  | 1GB          | 100% (4096/256)
+Orders        | 512B        | 8 records    | 2M records  | 1GB          | 100% (4096/512)  
+Logs          | 128B        | 32 records   | 8M records  | 1GB          | 100% (4096/128)
+Config        | 1024B       | 4 records    | 1M records  | 1GB          | 100% (4096/1024)
+</code></pre>
+<h2 id="record-operations"><a class="header" href="#record-operations">Record Operations</a></h2>
+<h3 id="storage-and-addressing"><a class="header" href="#storage-and-addressing">Storage and Addressing</a></h3>
+<p>Each table manages its own record storage independently.</p>
+<p><strong>Table Memory Organization</strong>:</p>
+<ul>
+<li><strong>Dedicated Memory Pool</strong>: Each table has its own memory-mapped region</li>
+<li><strong>Slot-Based Allocation</strong>: Records occupy fixed-size slots within the table</li>
+<li><strong>Bitmap Tracking</strong>: Fast free/used slot tracking using bitmaps</li>
+<li><strong>Sequential Layout</strong>: Records stored contiguously for cache efficiency</li>
+</ul>
+<p><strong>Record Access Pattern</strong>:</p>
+<pre><code>Operation Flow:
+1. Application specifies table name + record ID
+2. Table Manager looks up table instance
+3. Use Primary Index: record_id → slot_position
+4. Direct memory access to slot
+5. Return record data
+</code></pre>
+<p><strong>Index-Based Address Calculation</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn get_record_address(table: &amp;Table, record_id: RecordId) -&gt; Option&lt;*mut u8&gt; {
+    // Use primary index to find slot position
+    let slot_index = table.primary_index.get(record_id)?;
+    let offset = slot_index * table.record_size;
+    Some(table.memory_pool.base_addr + offset)
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Performance Characteristics</strong>:</p>
+<ul>
+<li><strong>O(1) Access</strong>: Direct memory addressing</li>
+<li><strong>No Fragmentation</strong>: Fixed-size slots eliminate fragmentation</li>
+<li><strong>Cache Friendly</strong>: Sequential record layout improves cache hits</li>
+<li><strong>NUMA Aware</strong>: Tables can be allocated on specific NUMA nodes</li>
+</ul>
+<p><strong>Record Status Flags</strong>:
+The 4-byte status flags field tracks various record states:</p>
+<pre><code>Status Flags Breakdown:
+├── Bits 0-3: Lifecycle State (ACTIVE, DELETED, TOMBSTONE)
+├── Bits 4-7: Lock State (UNLOCKED, READ_LOCK, WRITE_LOCK)
+├── Bits 8-11: Encoding Format (BINARY, JSON, etc.)
+├── Bits 12-15: Validation State (VALID, CORRUPT, etc.)
+├── Bits 16-31: Reserved for extensions
+</code></pre>
+<h3 id="record-ids-snowflake-format"><a class="header" href="#record-ids-snowflake-format">Record IDs (Snowflake Format)</a></h3>
+<p>Every record across all tables uses the same ID format for consistency and performance.</p>
+<p><strong>Snowflake ID Structure (64 bits)</strong>:</p>
+<pre><code>Record ID Components:
+├── Timestamp (41 bits)          # Creation time in milliseconds
+├── Datacenter ID (5 bits)       # Datacenter identifier (0-31)
+├── Machine ID (5 bits)          # Machine identifier (0-31)  
+├── Sequence Number (12 bits)    # Per-machine counter (0-4095)
+├── Sign Bit (1 bit)            # Always 0 (positive)
+</code></pre>
+<p><strong>ID Generation Properties</strong>:</p>
+<ul>
+<li><strong>Globally Unique</strong>: No coordination needed between machines</li>
+<li><strong>Time-Ordered</strong>: IDs roughly ordered by creation time</li>
+<li><strong>High Throughput</strong>: 4096 IDs per millisecond per machine</li>
+<li><strong>Distributed</strong>: No single point of failure</li>
+<li><strong>Debuggable</strong>: Can extract timestamp and source machine</li>
+</ul>
+<p><strong>Record Lookup Process</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Table Manager uses index-based lookup
+fn find_record(table_name: &amp;str, record_id: RecordId) -&gt; Option&lt;&amp;Record&gt; {
+    let table = self.get_table(table_name)?;
+    // Primary index maps record_id to slot_position
+    let slot_index = table.primary_index.get(record_id)?;
+    table.get_record_at_slot(slot_index)
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Key Properties for Index System</strong>:</p>
+<ul>
+<li><strong>Globally Unique</strong>: Each record ID is unique across entire system</li>
+<li><strong>Random Distribution</strong>: No correlation between ID and storage location</li>
+<li><strong>Index-Friendly</strong>: IDs work efficiently in hash tables and B+ trees</li>
+<li><strong>Cross-Table Queries</strong>: Consistent ID format enables joins and references</li>
+<li><strong>Debugging</strong>: Can extract creation timestamp and source information</li>
+</ul>
+<h3 id="record-lifecycle"><a class="header" href="#record-lifecycle">Record Lifecycle</a></h3>
+<p>Each table manages the lifecycle of its records independently.</p>
+<p><strong>Record State Machine</strong>:</p>
+<pre><code>Record States within Table:
+    ACTIVE ──delete──→ DELETED ──expire──→ TOMBSTONE
+       ↑                  │                    │
+       └──────resurrect───┘                    │
+                                               │
+                           ←──────cleanup──────┘
+</code></pre>
+<p><strong>State Definitions</strong>:</p>
+<ul>
+<li><strong>ACTIVE</strong>: Record is live and available for operations</li>
+<li><strong>DELETED</strong>: Soft-deleted, still recoverable, counts toward table capacity</li>
+<li><strong>TOMBSTONE</strong>: Marked for cleanup, space will be reclaimed</li>
+</ul>
+<p><strong>Table-Level Operations</strong>:</p>
+<p><strong>Insert Record</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Table {
+    fn insert(&amp;mut self, data: &amp;[u8]) -&gt; Result&lt;RecordId&gt; {
+        let slot = self.find_free_slot()?;
+        let record_id = self.generate_snowflake_id();
+        
+        // Write record to slot
+        self.write_record(slot, record_id, data)?;
+        self.mark_slot_used(slot);
+        
+        // Update primary index: record_id → slot_position
+        self.primary_index.insert(record_id, slot)?;
+        
+        // Update secondary indexes
+        self.update_secondary_indexes(record_id, data)?;
+        
+        Ok(record_id)
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Read Record</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn get(&amp;self, record_id: RecordId) -&gt; Option&lt;&amp;Record&gt; {
+    // Use primary index to find slot
+    let slot = self.primary_index.get(record_id)?;
+    let record = self.get_slot(slot)?;
+    if record.is_active() {
+        Some(record)
+    } else {
+        None
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Update Record (MVCC)</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn update(&amp;mut self, record_id: RecordId, data: &amp;[u8]) -&gt; Result&lt;()&gt; {
+    // Find current record location
+    let slot = self.primary_index.get(record_id)?;
+    
+    // Create new version while preserving old for concurrent readers
+    self.create_new_version(record_id, data)?;
+    self.update_version_chain(record_id)?;
+    
+    // Update secondary indexes with new data
+    self.update_secondary_indexes(record_id, data)?;
+    
+    Ok(())
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Delete Record</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>fn delete(&amp;mut self, record_id: RecordId) -&gt; Result&lt;()&gt; {
+    // Find record location via primary index
+    let slot = self.primary_index.get(record_id)?;
+    
+    // Mark record as deleted (soft delete)
+    self.mark_record_deleted(slot);
+    
+    // Remove from secondary indexes
+    self.remove_from_secondary_indexes(record_id)?;
+    
+    // Keep primary index entry for recovery
+    // Data still exists for recovery
+    Ok(())
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="index-system"><a class="header" href="#index-system">Index System</a></h2>
+<p>The index system is crucial for efficient record lookup and query processing. Instead of directly mapping record IDs to slot positions, we use a flexible index architecture.</p>
+<h3 id="primary-index"><a class="header" href="#primary-index">Primary Index</a></h3>
+<p><strong>Purpose</strong>: Maps Record ID (Snowflake) → Slot Position in the table</p>
+<p><strong>Design Rationale</strong>:</p>
+<ul>
+<li>Record IDs are globally unique random numbers (Snowflake format)</li>
+<li>No correlation between Record ID and physical storage location</li>
+<li>Primary index provides O(1) lookup from ID to slot position</li>
+<li>Enables flexible slot allocation and compaction</li>
+</ul>
+<p><strong>Primary Index Structure</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct PrimaryIndex {
+    // Hash table for O(1) lookup
+    index: HashMap&lt;RecordId, SlotIndex&gt;,
+    
+    // Optional: B+ tree for range queries on IDs
+    btree: Option&lt;BTreeMap&lt;RecordId, SlotIndex&gt;&gt;,
+    
+    // Metadata
+    table_id: TableId,
+    record_count: u64,
+}
+
+impl PrimaryIndex {
+    fn get(&amp;self, record_id: RecordId) -&gt; Option&lt;SlotIndex&gt; {
+        self.index.get(&amp;record_id).copied()
+    }
+    
+    fn insert(&amp;mut self, record_id: RecordId, slot: SlotIndex) -&gt; Result&lt;()&gt; {
+        if self.index.contains_key(&amp;record_id) {
+            return Err(Error::DuplicateKey);
+        }
+        self.index.insert(record_id, slot);
+        self.record_count += 1;
+        Ok(())
+    }
+    
+    fn remove(&amp;mut self, record_id: RecordId) -&gt; Option&lt;SlotIndex&gt; {
+        let slot = self.index.remove(&amp;record_id)?;
+        self.record_count -= 1;
+        Some(slot)
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Storage Characteristics</strong>:</p>
+<ul>
+<li><strong>In-Memory</strong>: Primary index kept entirely in RAM for speed</li>
+<li><strong>Persistent</strong>: Periodically flushed to disk for crash recovery</li>
+<li><strong>Memory Overhead</strong>: ~24 bytes per record (16-byte ID + 8-byte slot + overhead)</li>
+<li><strong>Performance</strong>: O(1) lookup, O(1) insert/delete</li>
+</ul>
+<h3 id="secondary-indexes"><a class="header" href="#secondary-indexes">Secondary Indexes</a></h3>
+<p><strong>Purpose</strong>: Enable efficient queries on non-primary key fields</p>
+<p><strong>Index Types Supported</strong>:</p>
+<p><strong>Hash Indexes</strong> (for equality queries):</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct HashSecondaryIndex {
+    name: String,
+    field: FieldName,
+    index: HashMap&lt;FieldValue, Vec&lt;RecordId&gt;&gt;,  // Multiple records per value
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>B+ Tree Indexes</strong> (for range queries):</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct BTreeSecondaryIndex {
+    name: String,
+    field: FieldName,
+    index: BTreeMap&lt;FieldValue, Vec&lt;RecordId&gt;&gt;,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Composite Indexes</strong> (multi-field):</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct CompositeIndex {
+    name: String,
+    fields: Vec&lt;FieldName&gt;,
+    index: BTreeMap&lt;CompositeKey, Vec&lt;RecordId&gt;&gt;,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Secondary Index Operations</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl SecondaryIndex {
+    // Find records by field value
+    fn find(&amp;self, value: &amp;FieldValue) -&gt; Vec&lt;RecordId&gt; {
+        self.index.get(value).cloned().unwrap_or_default()
+    }
+    
+    // Range query (for B+ tree indexes)
+    fn range(&amp;self, start: &amp;FieldValue, end: &amp;FieldValue) -&gt; Vec&lt;RecordId&gt; {
+        self.index
+            .range(start..=end)
+            .flat_map(|(_, record_ids)| record_ids.iter().copied())
+            .collect()
+    }
+    
+    // Update index when record changes
+    fn update(&amp;mut self, record_id: RecordId, old_value: Option&lt;&amp;FieldValue&gt;, new_value: Option&lt;&amp;FieldValue&gt;) -&gt; Result&lt;()&gt; {
+        // Remove old entry
+        if let Some(old_val) = old_value {
+            self.remove_entry(old_val, record_id);
+        }
+        
+        // Add new entry  
+        if let Some(new_val) = new_value {
+            self.add_entry(new_val.clone(), record_id);
+        }
+        
+        Ok(())
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="index-storage"><a class="header" href="#index-storage">Index Storage</a></h3>
+<p><strong>Index File Organization</strong>:</p>
+<pre><code>Table Directory Structure:
+├── data/
+│   └── table_records.dat        # Record data (mmap file)
+├── indexes/
+│   ├── primary.idx             # Primary index (RecordID → Slot)
+│   ├── user_id.idx             # Secondary index on user_id
+│   ├── timestamp.idx           # Secondary index on timestamp
+│   └── symbol_price.idx        # Composite index
+└── metadata/
+    ├── table.meta              # Table schema and metadata
+    └── indexes.meta            # Index definitions
+</code></pre>
+<p><strong>Index Persistence Strategy</strong>:</p>
+<ul>
+<li><strong>Write-Through</strong>: Index updates immediately written to disk</li>
+<li><strong>Write-Behind</strong>: Batch index updates for performance</li>
+<li><strong>Memory-Mapped</strong>: Large indexes can be memory-mapped</li>
+<li><strong>Crash Recovery</strong>: Rebuild indexes from record data if corrupted</li>
+</ul>
+<p><strong>Index Memory Management</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct TableIndexes {
+    primary: PrimaryIndex,                          // Always in memory
+    secondary: HashMap&lt;String, Box&lt;dyn SecondaryIndex&gt;&gt;, // Configurable
+    
+    // Memory management
+    memory_limit: usize,                           // Max memory for indexes
+    cache_policy: IndexCachePolicy,               // LRU, LFU, etc.
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="query-processing"><a class="header" href="#query-processing">Query Processing</a></h3>
+<p><strong>Query Execution Flow</strong>:</p>
+<pre><code>Query Types and Execution:
+
+1. Point Query (by Record ID):
+   Record ID → Primary Index → Slot Position → Record Data
+   
+2. Secondary Key Query:
+   Field Value → Secondary Index → Record IDs → Primary Index → Slot Positions → Record Data
+   
+3. Range Query:
+   Range → B+ Tree Index → Record IDs → Primary Index → Slot Positions → Record Data
+   
+4. Composite Query:
+   Multi-Field Values → Composite Index → Record IDs → Primary Index → Record Data
+</code></pre>
+<p><strong>Query Optimization</strong>:</p>
+<ul>
+<li><strong>Index Selection</strong>: Choose most selective index for query</li>
+<li><strong>Index Intersection</strong>: Combine multiple indexes for complex queries</li>
+<li><strong>Parallel Lookup</strong>: Parallelize primary index lookups</li>
+<li><strong>Caching</strong>: Cache frequently accessed record IDs and slot positions</li>
+</ul>
+<p><strong>Example Query Processing</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Table {
+    // Query by secondary index
+    fn find_by_user_id(&amp;self, user_id: u32) -&gt; Result&lt;Vec&lt;&amp;Record&gt;&gt; {
+        // 1. Use secondary index to find record IDs
+        let record_ids = self.secondary_indexes
+            .get("user_id")?
+            .find(&amp;FieldValue::U32(user_id));
+        
+        // 2. Use primary index to find slot positions
+        let mut records = Vec::new();
+        for record_id in record_ids {
+            if let Some(slot) = self.primary_index.get(record_id) {
+                if let Some(record) = self.get_slot(slot) {
+                    if record.is_active() {
+                        records.push(record);
+                    }
+                }
+            }
+        }
+        
+        Ok(records)
+    }
+    
+    // Range query
+    fn find_by_timestamp_range(&amp;self, start: u64, end: u64) -&gt; Result&lt;Vec&lt;&amp;Record&gt;&gt; {
+        let record_ids = self.secondary_indexes
+            .get("timestamp")?
+            .range(&amp;FieldValue::U64(start), &amp;FieldValue::U64(end));
+            
+        // Convert to records using primary index
+        self.lookup_records_by_ids(record_ids)
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Performance Characteristics</strong>:</p>
+<pre><code>Operation Type        | Primary Index | Secondary Index | Total Complexity
+----------------------|---------------|-----------------|------------------
+Point Query (by ID)   | O(1)         | N/A            | O(1)
+Secondary Key Query   | O(1)         | O(1)           | O(1) + O(k) where k=results
+Range Query           | O(1)         | O(log n + k)   | O(log n + k)
+Composite Query       | O(1)         | O(log n + k)   | O(log n + k)
+Insert                | O(1)         | O(log n)       | O(log n)
+Update                | O(1)         | O(log n)       | O(log n)
+Delete                | O(1)         | O(log n)       | O(log n)
+</code></pre>
+<h2 id="advanced-features"><a class="header" href="#advanced-features">Advanced Features</a></h2>
+<h3 id="multi-version-concurrency-mvcc"><a class="header" href="#multi-version-concurrency-mvcc">Multi-Version Concurrency (MVCC)</a></h3>
+<p>The Table Manager coordinates with the Transaction Manager to provide MVCC for concurrent access.</p>
+<p><strong>Version Chain Management</strong>:</p>
+<pre><code>Record Versions within Table:
+Latest ──→ Version 2 ──→ Version 1 ──→ Version 0
+  │           │            │            │
+Active      TX-127       TX-123       TX-100
+Reader      (visible)    (historical) (old)
+</code></pre>
+<p><strong>How MVCC Works with Tables</strong>:</p>
+<ul>
+<li><strong>Per-Record Versioning</strong>: Each record can have multiple versions</li>
+<li><strong>Transaction Coordination</strong>: Table Manager works with Transaction Manager</li>
+<li><strong>Version Visibility</strong>: Transactions see appropriate record versions</li>
+<li><strong>Garbage Collection</strong>: Old versions cleaned up automatically</li>
+</ul>
+<p><strong>Table-Level MVCC Operations</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Table {
+    fn read_at_timestamp(&amp;self, record_id: RecordId, timestamp: u64) -&gt; Option&lt;&amp;Record&gt; {
+        let versions = self.get_version_chain(record_id)?;
+        versions.find_version_at_timestamp(timestamp)
+    }
+    
+    fn create_new_version(&amp;mut self, record_id: RecordId, data: &amp;[u8]) -&gt; Result&lt;()&gt; {
+        // Create new version while keeping old ones for concurrent readers
+        let new_version = self.allocate_version_slot()?;
+        self.write_version(new_version, data)?;
+        self.link_to_version_chain(record_id, new_version)?;
+        Ok(())
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Benefits</strong>:</p>
+<ul>
+<li><strong>No Read Blocks</strong>: Readers never block writers or other readers</li>
+<li><strong>Consistent Snapshots</strong>: Each transaction sees consistent data</li>
+<li><strong>High Concurrency</strong>: Multiple transactions can operate simultaneously</li>
+<li><strong>Table Isolation</strong>: MVCC handled independently per table</li>
+</ul>
+<h3 id="schema-management"><a class="header" href="#schema-management">Schema Management</a></h3>
+<p>Each table has its own schema that defines the structure of its records.</p>
+<p><strong>Table Schema Components</strong>:</p>
+<ul>
+<li><strong>Field Definitions</strong>: Name, type, offset, size for each field</li>
+<li><strong>Schema Version</strong>: Track evolution over time</li>
+<li><strong>Validation Rules</strong>: Data type and business rule validation</li>
+<li><strong>Default Values</strong>: Used when adding new fields</li>
+</ul>
+<p><strong>Schema Evolution Process</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Table {
+    fn evolve_schema(&amp;mut self, changes: SchemaChanges) -&gt; Result&lt;()&gt; {
+        // Validate changes are backward compatible
+        self.validate_schema_changes(&amp;changes)?;
+        
+        // Update schema definition
+        let new_version = self.schema.version + 1;
+        let new_schema = self.schema.apply_changes(changes, new_version)?;
+        
+        // All new records use new schema
+        self.schema = new_schema;
+        
+        // Old records still work (lazy migration)
+        Ok(())
+    }
+    
+    fn validate_record(&amp;self, data: &amp;[u8]) -&gt; Result&lt;()&gt; {
+        self.schema.validate_fields(data)?;
+        self.schema.check_business_rules(data)?;
+        Ok(())
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Schema Change Types</strong>:</p>
+<ul>
+<li><strong>Add Field</strong>: New fields get default values for existing records</li>
+<li><strong>Deprecate Field</strong>: Mark as unused but don't delete (backward compatibility)</li>
+<li><strong>Modify Constraints</strong>: Update validation rules</li>
+<li><strong>Version Bump</strong>: Increment schema version</li>
+</ul>
+<p><strong>Migration Strategy</strong>:</p>
+<ul>
+<li><strong>Lazy Migration</strong>: Records migrated when accessed</li>
+<li><strong>Batch Migration</strong>: Migrate all records during maintenance</li>
+<li><strong>Version Coexistence</strong>: Multiple schema versions can coexist</li>
+<li><strong>Rollback Support</strong>: Can revert to previous schema version</li>
+</ul>
+<h3 id="zero-copy-storage"><a class="header" href="#zero-copy-storage">Zero-Copy Storage</a></h3>
+<p>Each table implements zero-copy storage for maximum performance.</p>
+<p><strong>Table-Level Zero-Copy Implementation</strong>:</p>
+<ul>
+<li><strong>Direct Memory Layout</strong>: Records stored in CPU-native binary format</li>
+<li><strong>No Serialization</strong>: Data ready for immediate use by applications</li>
+<li><strong>Memory Alignment</strong>: Fields aligned for optimal CPU cache performance</li>
+<li><strong>Type-Safe Access</strong>: Schema ensures correct data interpretation</li>
+</ul>
+<p><strong>How Tables Store Data</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Table {
+    fn write_record_direct(&amp;mut self, slot: SlotIndex, data: &amp;RecordData) -&gt; Result&lt;()&gt; {
+        let memory_addr = self.get_slot_address(slot);
+        
+        // Write header directly to memory
+        self.write_header(memory_addr, &amp;data.header)?;
+        
+        // Write payload directly (no serialization)
+        self.write_payload(memory_addr + HEADER_SIZE, &amp;data.payload)?;
+        
+        // Write footer with checksum
+        self.write_footer(memory_addr + HEADER_SIZE + data.payload.len(), &amp;data.footer)?;
+        
+        Ok(())
+    }
+    
+    fn read_record_direct(&amp;self, slot: SlotIndex) -&gt; Option&lt;&amp;Record&gt; {
+        let memory_addr = self.get_slot_address(slot);
+        // Direct pointer to memory - no copying or parsing needed
+        unsafe { &amp;*(memory_addr as *const Record) }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Field Storage within Tables</strong>:</p>
+<ul>
+<li><strong>Integers &amp; Floats</strong>: Stored as native binary (u32, f64, etc.)</li>
+<li><strong>Strings</strong>: Offset + length pointer to string data within record</li>
+<li><strong>Arrays</strong>: Count + elements (if fixed-size) or offset pointer</li>
+<li><strong>Enums</strong>: Smallest integer type that fits all variants</li>
+</ul>
+<p><strong>Memory Layout Optimization</strong>:</p>
+<ul>
+<li><strong>Field Grouping</strong>: 8-byte, 4-byte, 2-byte, 1-byte fields grouped together</li>
+<li><strong>Cache Line Alignment</strong>: Records aligned to 64-byte boundaries</li>
+<li><strong>Padding Elimination</strong>: Packed structures minimize wasted space</li>
+</ul>
+<h2 id="performance"><a class="header" href="#performance">Performance</a></h2>
+<h3 id="data-types-and-storage"><a class="header" href="#data-types-and-storage">Data Types and Storage</a></h3>
+<p>Tables optimize storage layout for different data types:</p>
+<p><strong>Primitive Types (Direct Storage)</strong>:</p>
+<ul>
+<li><strong>Integers</strong>: u8, u16, u32, u64, i8, i16, i32, i64 stored as native binary</li>
+<li><strong>Floating Point</strong>: f32, f64 stored as IEEE 754 binary</li>
+<li><strong>Booleans</strong>: Single byte (0 or 1)</li>
+<li><strong>Timestamps</strong>: i64 milliseconds since epoch</li>
+<li><strong>Enums</strong>: Smallest integer type that accommodates all variants</li>
+</ul>
+<p><strong>Complex Types (Offset-Based)</strong>:</p>
+<ul>
+<li><strong>Strings</strong>: [offset: u16, length: u16] + UTF-8 bytes in payload area</li>
+<li><strong>Binary Blobs</strong>: [offset: u16, length: u16] + raw bytes in payload area</li>
+<li><strong>Arrays</strong>: Element count + elements (if fixed-size) or offset to data</li>
+<li><strong>Optional Fields</strong>: Null bitmask + conditional storage</li>
+</ul>
+<p><strong>Table-Specific Optimizations</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Example: Orders table layout optimized for trading
+struct OrderRecord {
+    // Hot fields first (frequently accessed)
+    order_id: u64,           // 8 bytes
+    price: u64,              // 8 bytes (fixed-point)
+    quantity: u64,           // 8 bytes
+    timestamp: u64,          // 8 bytes
+    
+    // 4-byte fields grouped together
+    user_id: u32,            // 4 bytes
+    symbol_offset: u16,      // 2 bytes
+    symbol_len: u16,         // 2 bytes
+    
+    // Smaller fields at end
+    order_type: u8,          // 1 byte
+    status: u8,              // 1 byte
+    flags: u16,              // 2 bytes
+    
+    // Total: 48 bytes + variable string data
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="performance-comparison"><a class="header" href="#performance-comparison">Performance Comparison</a></h3>
+<p><strong>Storage Engine Comparison (Page-Aware + Indexes)</strong>:</p>
+<pre><code>Storage Method         | Write Time | Read Time | Memory Use        | Page Efficiency | Index Overhead
+-----------------------|------------|-----------|-------------------|-----------------|----------------
+Table Manager (Optimized)| ~200ns  | ~50ns     | Table + Indexes   | 100%            | ~24B per record
+Traditional Database   | ~5-20ms   | ~2-10ms   | Variable + Indexes| Variable        | High
+JSON + Parsing         | ~5μs      | ~3μs      | Text overhead     | N/A             | External indexes
+Protocol Buffers       | ~2μs      | ~1.5μus   | Compact binary    | N/A             | External indexes
+Redis (In-Memory)      | ~1μs      | ~800ns    | Key-value + hash  | N/A             | Built-in hash
+</code></pre>
+<p><strong>Table Performance with Page-Aware Design</strong>:</p>
+<pre><code>Table Type    | Record Size | Records/Page | Index Size | Read Amplification | Query Throughput
+--------------|-------------|--------------|------------|--------------------|------------------
+Users         | 256B        | 16 records   | ~24B       | 1x (batch) / 16x   | 1M+ point queries
+Orders        | 512B        | 8 records    | ~24B       | 1x (batch) / 8x    | 500K+ range queries
+Logs          | 128B        | 32 records   | ~24B       | 1x (batch) / 32x   | 2M+ indexed inserts
+Config        | 1024B       | 4 records    | ~24B       | 1x (batch) / 4x    | 100K+ updates
+</code></pre>
+<p><strong>Index Performance Breakdown (Page-Aware)</strong>:</p>
+<pre><code>Operation Type          | Primary Index | Secondary Index | Page Load | Total Time (Single/Batch)
+------------------------|---------------|-----------------|-----------|-------------------------
+Point Query (by ID)     | ~30ns        | N/A            | ~200ns    | ~250ns / ~50ns (amortized)
+Secondary Field Query   | ~30ns        | ~100ns         | ~200ns    | ~330ns / ~130ns (amortized)
+Range Query            | ~30ns        | ~200ns         | ~500ns    | ~730ns / ~200ns (batch)
+Insert (with indexes)   | ~50ns        | ~150ns         | ~300ns    | ~500ns / ~200ns (batch)
+Update (with indexes)   | ~50ns        | ~300ns         | ~300ns    | ~650ns / ~300ns (batch)
+Delete (with indexes)   | ~50ns        | ~150ns         | ~200ns    | ~400ns / ~150ns (batch)
+</code></pre>
+<p><strong>Architectural Benefits (Page-Aware Design)</strong>:</p>
+<pre><code>Aspect              | Traditional DB      | Table Manager (Page-Aware)
+--------------------|--------------------|--------------------------
+Data Access         | SQL parse + execute | Direct memory read
+Memory Layout       | Row-based mixed     | Page-aligned, type-grouped
+Fragmentation       | Variable row sizes  | Fixed slots per table
+Type Safety         | Runtime validation  | Compile-time schema
+Transaction Scope   | Database-wide       | Table-level isolation
+Scaling             | Vertical mainly     | Horizontal per table
+Page Efficiency     | Variable            | 100% (perfect divisors)
+Read Amplification  | High                | 1-32x (batch optimized)
+Write Amplification | High                | 1-32x (batch optimized)
+Cache Utilization   | Poor                | Excellent (page locality)
+</code></pre>
+<h3 id="optimization-strategies"><a class="header" href="#optimization-strategies">Optimization Strategies</a></h3>
+<p><strong>Table-Level Optimizations</strong>:</p>
+<ul>
+<li><strong>Page-Aligned Records</strong>: Choose record sizes as perfect divisors of 4KB</li>
+<li><strong>Hot Field Grouping</strong>: Place frequently accessed fields at record start</li>
+<li><strong>Cache Line Alignment</strong>: Align records to 64-byte CPU cache boundaries</li>
+<li><strong>NUMA Locality</strong>: Allocate tables on local NUMA nodes</li>
+<li><strong>Batch Operations</strong>: Process multiple records within same page</li>
+<li><strong>Page Locality</strong>: Allocate related records in same pages when possible</li>
+</ul>
+<p><strong>Memory Management</strong>:</p>
+<ul>
+<li><strong>Page-Aware Pools</strong>: Each table manages page-aligned memory regions</li>
+<li><strong>Page-Level Allocation</strong>: Allocate records in page-aware manner</li>
+<li><strong>Prefault Pages</strong>: Pre-fault memory pages during table initialization</li>
+<li><strong>Huge Pages</strong>: Use 2MB/1GB pages to reduce TLB pressure</li>
+<li><strong>Memory Locking</strong>: Lock critical tables in physical memory</li>
+<li><strong>Hot Page Caching</strong>: Keep frequently accessed pages in faster memory</li>
+</ul>
+<p><strong>Storage Tiering</strong>:</p>
+<ul>
+<li><strong>Hot Tables</strong>: Active tables on local NVMe storage</li>
+<li><strong>Warm Tables</strong>: Infrequently accessed tables on network storage</li>
+<li><strong>Cold Tables</strong>: Archived tables with compression on object storage</li>
+</ul>
+<h2 id="page-aware-storage-design"><a class="header" href="#page-aware-storage-design">Page-Aware Storage Design</a></h2>
+<h3 id="readwrite-amplification-problem"><a class="header" href="#readwrite-amplification-problem">Read/Write Amplification Problem</a></h3>
+<p><strong>The Core Issue</strong>:
+Memory-mapped files operate at the OS page level (typically 4KB), but our records might be much smaller. This creates a significant read/write amplification problem.</p>
+<p><strong>Amplification Analysis</strong>:</p>
+<pre><code>OS Page Size: 4KB (4096 bytes)
+Record Sizes and Amplification:
+
+Record Size | Records/Page | Read Amplification | Write Amplification
+------------|--------------|--------------------|--------------------- 
+128B        | 32 records   | 32x (4096/128)     | Up to 32x
+256B        | 16 records   | 16x (4096/256)     | Up to 16x  
+512B        | 8 records    | 8x (4096/512)      | Up to 8x
+1024B       | 4 records    | 4x (4096/1024)     | Up to 4x
+2048B       | 2 records    | 2x (4096/2048)     | Up to 2x
+4096B       | 1 record     | 1x (perfect)       | 1x (perfect)
+</code></pre>
+<p><strong>Real-World Impact</strong>:</p>
+<ul>
+<li><strong>Single Record Access</strong>: Reading 128B record loads entire 4KB page (32x amplification)</li>
+<li><strong>Single Record Update</strong>: Modifying 128B record may cause 4KB page writeback</li>
+<li><strong>Cache Pollution</strong>: Unwanted data loaded into CPU caches</li>
+<li><strong>Memory Bandwidth</strong>: Wasted memory bandwidth on unused data</li>
+<li><strong>I/O Overhead</strong>: Higher I/O load than necessary</li>
+</ul>
+<p><strong>Why This Matters for Performance</strong>:</p>
+<pre><code>Example: Orders table with 128B records
+- Application reads 1 order
+- OS loads 4KB page (32 orders)  
+- CPU cache filled with 31 unwanted orders
+- Memory bandwidth: 32x higher than needed
+- If page is dirty: 4KB write for 128B change
+</code></pre>
+<h3 id="page-aligned-record-layout"><a class="header" href="#page-aligned-record-layout">Page-Aligned Record Layout</a></h3>
+<p><strong>Strategy 1: Optimal Record Sizing</strong>:
+Design record sizes to be friendly divisors of 4KB page size.</p>
+<p><strong>Page-Friendly Record Sizes</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>// Optimal record sizes for 4KB pages
+const PAGE_SIZE: usize = 4096;
+
+// Perfect divisors (no wasted space)
+const RECORD_SIZE_512B: usize = 512;   // 8 records per page
+const RECORD_SIZE_1024B: usize = 1024; // 4 records per page  
+const RECORD_SIZE_2048B: usize = 2048; // 2 records per page
+const RECORD_SIZE_4096B: usize = 4096; // 1 record per page
+
+// Good divisors (minimal waste)
+const RECORD_SIZE_256B: usize = 256;   // 16 records per page
+const RECORD_SIZE_1365B: usize = 1365; // 3 records per page (3B waste)
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Table Design with Page Awareness</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct PageAwareTable {
+    record_size: usize,
+    records_per_page: usize,
+    page_count: usize,
+    
+    // Page-aligned memory mapping
+    memory_map: MemoryMap,
+    
+    // Page-level metadata
+    page_headers: Vec&lt;PageHeader&gt;,
+    
+    // Hot page tracking
+    hot_pages: HashSet&lt;PageIndex&gt;,
+}
+
+struct PageHeader {
+    page_index: u32,
+    used_slots: u16,        // How many records in this page
+    free_slots: u16,        // Available slots
+    dirty: bool,            // Page has been modified
+    access_count: u32,      // For hot page detection
+    last_access: Timestamp,
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Strategy 2: Page-Level Record Organization</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl PageAwareTable {
+    fn allocate_record(&amp;mut self) -&gt; Result&lt;(PageIndex, SlotIndex)&gt; {
+        // Try to allocate in a page with existing records (better cache locality)
+        if let Some(page_idx) = self.find_page_with_space() {
+            let slot_idx = self.allocate_slot_in_page(page_idx)?;
+            return Ok((page_idx, slot_idx));
+        }
+        
+        // Allocate new page if needed
+        let page_idx = self.allocate_new_page()?;
+        let slot_idx = 0; // First slot in new page
+        Ok((page_idx, slot_idx))
+    }
+    
+    fn find_page_with_space(&amp;self) -&gt; Option&lt;PageIndex&gt; {
+        // Prefer hot pages with available space
+        for &amp;page_idx in &amp;self.hot_pages {
+            if self.page_headers[page_idx].free_slots &gt; 0 {
+                return Some(page_idx);
+            }
+        }
+        
+        // Fall back to any page with space
+        self.page_headers
+            .iter()
+            .position(|header| header.free_slots &gt; 0)
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="batch-operations"><a class="header" href="#batch-operations">Batch Operations</a></h3>
+<p><strong>Page-Level Batch Processing</strong>:
+Instead of processing records individually, process entire pages or multiple records within a page.</p>
+<p><strong>Batch Read Operations</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Table {
+    // Read all records in a page
+    fn read_page(&amp;self, page_idx: PageIndex) -&gt; Result&lt;Vec&lt;&amp;Record&gt;&gt; {
+        let page_header = &amp;self.page_headers[page_idx];
+        let mut records = Vec::with_capacity(page_header.used_slots as usize);
+        
+        let page_base = self.get_page_address(page_idx);
+        for slot_idx in 0..self.records_per_page {
+            if self.is_slot_used(page_idx, slot_idx) {
+                let record_addr = page_base + (slot_idx * self.record_size);
+                let record = unsafe { &amp;*(record_addr as *const Record) };
+                records.push(record);
+            }
+        }
+        
+        Ok(records)
+    }
+    
+    // Batch query within page range
+    fn query_page_range(&amp;self, start_page: PageIndex, end_page: PageIndex, filter: &amp;dyn Fn(&amp;Record) -&gt; bool) -&gt; Vec&lt;&amp;Record&gt; {
+        let mut results = Vec::new();
+        
+        for page_idx in start_page..=end_page {
+            // Load entire page at once (amortize page load cost)
+            if let Ok(page_records) = self.read_page(page_idx) {
+                for record in page_records {
+                    if filter(record) {
+                        results.push(record);
+                    }
+                }
+            }
+        }
+        
+        results
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Batch Write Operations</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Table {
+    // Insert multiple records in same page
+    fn batch_insert_in_page(&amp;mut self, page_idx: PageIndex, records: Vec&lt;&amp;[u8]&gt;) -&gt; Result&lt;Vec&lt;RecordId&gt;&gt; {
+        let available_slots = self.page_headers[page_idx].free_slots as usize;
+        if records.len() &gt; available_slots {
+            return Err(Error::PageFull);
+        }
+        
+        let mut record_ids = Vec::with_capacity(records.len());
+        
+        // Mark page as dirty once
+        self.page_headers[page_idx].dirty = true;
+        
+        for data in records {
+            let slot_idx = self.find_free_slot_in_page(page_idx)?;
+            let record_id = self.generate_snowflake_id();
+            
+            self.write_record_to_slot(page_idx, slot_idx, record_id, data)?;
+            self.update_indexes(record_id, page_idx, slot_idx)?;
+            
+            record_ids.push(record_id);
+        }
+        
+        // Update page header once
+        self.page_headers[page_idx].used_slots += records.len() as u16;
+        self.page_headers[page_idx].free_slots -= records.len() as u16;
+        
+        Ok(record_ids)
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="hot-page-management"><a class="header" href="#hot-page-management">Hot Page Management</a></h3>
+<p><strong>Hot Page Detection and Optimization</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct HotPageManager {
+    // Track page access patterns
+    page_access_stats: HashMap&lt;PageIndex, PageAccessStats&gt;,
+    
+    // Currently hot pages (kept in faster storage/memory)
+    hot_pages: LruCache&lt;PageIndex, PageData&gt;,
+    
+    // Configuration
+    hot_threshold: u32,        // Access count to be considered hot
+    hot_page_limit: usize,     // Max number of hot pages to track
+}
+
+struct PageAccessStats {
+    access_count: u32,
+    last_access: Timestamp,
+    access_pattern: AccessPattern, // Sequential, Random, etc.
+}
+
+impl HotPageManager {
+    fn on_page_access(&amp;mut self, page_idx: PageIndex) {
+        let stats = self.page_access_stats.entry(page_idx).or_default();
+        stats.access_count += 1;
+        stats.last_access = now();
+        
+        // Promote to hot if threshold reached
+        if stats.access_count &gt;= self.hot_threshold {
+            self.promote_to_hot_page(page_idx);
+        }
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Page-Aware Query Optimization</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Table {
+    fn optimize_query_for_pages(&amp;self, record_ids: Vec&lt;RecordId&gt;) -&gt; Vec&lt;&amp;Record&gt; {
+        // Group record IDs by their page location
+        let mut records_by_page: HashMap&lt;PageIndex, Vec&lt;(SlotIndex, RecordId)&gt;&gt; = HashMap::new();
+        
+        for record_id in record_ids {
+            if let Some(slot_idx) = self.primary_index.get(record_id) {
+                let page_idx = slot_idx / self.records_per_page;
+                let page_slot = slot_idx % self.records_per_page;
+                records_by_page.entry(page_idx).or_default().push((page_slot, record_id));
+            }
+        }
+        
+        let mut results = Vec::new();
+        
+        // Process each page once, collecting all needed records
+        for (page_idx, page_records) in records_by_page {
+            // Load page once
+            let page_base = self.get_page_address(page_idx);
+            
+            // Collect all records from this page
+            for (slot_idx, _record_id) in page_records {
+                let record_addr = page_base + (slot_idx * self.record_size);
+                let record = unsafe { &amp;*(record_addr as *const Record) };
+                results.push(record);
+            }
+        }
+        
+        results
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<p><strong>Performance Impact of Page-Aware Design</strong>:</p>
+<pre><code>Optimization Strategy          | Read Amplification | Write Amplification | Performance Gain
+------------------------------|--------------------|--------------------|------------------
+Original (128B records)       | 32x               | 32x                | Baseline
+Page-Aligned (512B records)   | 8x                | 8x                 | 4x improvement
+Batch Operations (8 at once)  | 4x                | 4x                 | 8x improvement
+Hot Page Caching              | 1x (for hot data) | 1x (for hot data) | 10-32x improvement
+Combined Optimizations         | 1-4x              | 1-4x               | 10-30x improvement
+</code></pre>
+<h2 id="data-integrity"><a class="header" href="#data-integrity">Data Integrity</a></h2>
+<p><strong>Table-Level Validation</strong>:</p>
+<ul>
+<li><strong>Schema Validation</strong>: Each table validates records against its schema</li>
+<li><strong>Business Rules</strong>: Table-specific validation logic</li>
+<li><strong>Reference Integrity</strong>: Cross-table reference validation</li>
+<li><strong>Data Quality</strong>: Range, format, and constraint checking</li>
+</ul>
+<p><strong>Integrity Protection Mechanisms</strong>:</p>
+<ul>
+<li><strong>Record Checksums</strong>: CRC32 checksums for fast corruption detection</li>
+<li><strong>Table Checksums</strong>: Validate entire table integrity periodically</li>
+<li><strong>Cryptographic Hashes</strong>: Strong protection for sensitive tables</li>
+<li><strong>Error Correction</strong>: Reed-Solomon codes for critical data</li>
+<li><strong>Audit Trails</strong>: Track all changes for compliance and debugging</li>
+</ul>
+<p><strong>Table-Level Integrity Operations</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl Table {
+    fn validate_integrity(&amp;self) -&gt; Result&lt;()&gt; {
+        // Check all record checksums
+        for slot in self.used_slots() {
+            let record = self.get_slot(slot);
+            record.verify_checksum()?;
+        }
+        
+        // Validate table-level constraints
+        self.schema.validate_table_constraints(self)?;
+        
+        // Check cross-references if any
+        self.validate_foreign_keys()?;
+        
+        Ok(())
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h2 id="catalog-system"><a class="header" href="#catalog-system">Catalog System</a></h2>
+<p>The catalog manages metadata about all tables and schemas in the Table Manager.</p>
+<h3 id="catalog-structure"><a class="header" href="#catalog-structure">Catalog Structure</a></h3>
+<p><strong>Table Registry</strong>:</p>
+<ul>
+<li><strong>Table Metadata</strong>: Name, ID, record size, schema version</li>
+<li><strong>Storage Location</strong>: File paths and memory pool information</li>
+<li><strong>Schema Definitions</strong>: Current and historical schema versions</li>
+<li><strong>Index Registry</strong>: Secondary indexes for each table</li>
+<li><strong>Statistics</strong>: Record counts, access patterns, performance metrics</li>
+</ul>
+<p><strong>Catalog Data Structure</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>struct TableCatalog {
+    // Table registry for fast lookup
+    tables: HashMap&lt;String, TableInfo&gt;,
+    
+    // Schema cache for validation
+    schemas: HashMap&lt;u32, Schema&gt;,
+    
+    // Index registry per table
+    table_indexes: HashMap&lt;TableId, IndexRegistry&gt;,
+    
+    // System metadata
+    system_info: SystemMetadata,
+}
+
+struct TableInfo {
+    table_id: u32,
+    name: String,
+    record_size: u32,
+    schema_version: u32,
+    file_path: PathBuf,
+    memory_pool: MemoryPoolInfo,
+    index_files: IndexFileInfo,        // New: index file locations
+    statistics: TableStats,
+    created_at: Timestamp,
+}
+
+struct IndexRegistry {
+    primary_index: PrimaryIndexInfo,
+    secondary_indexes: HashMap&lt;String, SecondaryIndexInfo&gt;,
+    index_memory_usage: usize,
+}
+
+struct IndexFileInfo {
+    primary_index_file: PathBuf,       // primary.idx
+    secondary_index_dir: PathBuf,      // indexes/
+    index_metadata_file: PathBuf,      // indexes.meta
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="catalog-operations"><a class="header" href="#catalog-operations">Catalog Operations</a></h3>
+<p><strong>Core Table Operations</strong>:</p>
+<pre><pre class="playground"><code class="language-rust"><span class="boring">#![allow(unused)]
+</span><span class="boring">fn main() {
+</span>impl TableManager {
+    // Create new table with schema and indexes
+    fn create_table(&amp;mut self, name: String, schema: Schema) -&gt; Result&lt;TableId&gt; {
+        let table_info = TableInfo::new(name, schema)?;
+        
+        // Register table in catalog
+        self.catalog.register_table(table_info)?;
+        
+        // Initialize table storage
+        self.initialize_table_storage(&amp;table_info)?;
+        
+        // Create primary index
+        self.create_primary_index(table_info.table_id)?;
+        
+        // Create default secondary indexes based on schema
+        self.create_default_secondary_indexes(table_info.table_id, &amp;table_info.schema)?;
+        
+        Ok(table_info.table_id)
+    }
+    
+    // Get table by name for operations  
+    fn get_table(&amp;self, name: &amp;str) -&gt; Option&lt;&amp;Table&gt; {
+        let table_info = self.catalog.get_table_info(name)?;
+        self.tables.get(&amp;table_info.table_id)
+    }
+    
+    // Create secondary index on table
+    fn create_index(&amp;mut self, table_name: &amp;str, field_name: &amp;str, index_type: IndexType) -&gt; Result&lt;()&gt; {
+        let table = self.get_table_mut(table_name)?;
+        let index_info = SecondaryIndexInfo {
+            name: format!("{}_{}", table_name, field_name),
+            field: field_name.to_string(),
+            index_type,
+        };
+        
+        // Create and build the index
+        let index = self.build_secondary_index(&amp;index_info, table)?;
+        table.add_secondary_index(index_info.name.clone(), index);
+        
+        // Update catalog
+        self.catalog.register_secondary_index(table.table_id, index_info)?;
+        
+        Ok(())
+    }
+    
+    // Update table schema (handles index updates)
+    fn evolve_table_schema(&amp;mut self, name: &amp;str, changes: SchemaChanges) -&gt; Result&lt;()&gt; {
+        let table = self.get_table_mut(name)?;
+        
+        // Check if schema changes affect existing indexes
+        let affected_indexes = self.find_affected_indexes(&amp;table.table_id, &amp;changes)?;
+        
+        // Update schema
+        table.evolve_schema(changes)?;
+        self.catalog.update_schema(name, &amp;table.schema)?;
+        
+        // Rebuild affected secondary indexes
+        for index_name in affected_indexes {
+            self.rebuild_secondary_index(&amp;table.table_id, &amp;index_name)?;
+        }
+        
+        Ok(())
+    }
+}
+<span class="boring">}</span></code></pre></pre>
+<h3 id="catalog-persistence"><a class="header" href="#catalog-persistence">Catalog Persistence</a></h3>
+<p><strong>Persistence Strategy</strong>:</p>
+<ul>
+<li><strong>Atomic Updates</strong>: All catalog changes written atomically</li>
+<li><strong>Recovery Support</strong>: Catalog rebuilds table registry on startup</li>
+<li><strong>Version Control</strong>: Track schema evolution over time</li>
+<li><strong>Backup Integration</strong>: Catalog metadata included in snapshots</li>
+</ul>
+<p><strong>Bootstrap Sequence</strong>:</p>
+<ol>
+<li>Load catalog metadata from persistent storage</li>
+<li>Validate all table files and index files exist and are accessible</li>
+<li>Initialize table memory pools and allocation bitmaps</li>
+<li>Load primary indexes into memory (critical for O(1) access)</li>
+<li>Load or rebuild secondary indexes based on configuration</li>
+<li>Verify index consistency with record data</li>
+<li>Mark catalog and indexes as ready for operations</li>
+</ol>
+<p><strong>Index Recovery Strategy</strong>:</p>
+<ul>
+<li><strong>Primary Index</strong>: Always rebuilt if corrupted (scan all records)</li>
+<li><strong>Secondary Indexes</strong>: Can be rebuilt from primary index + record data</li>
+<li><strong>Crash Recovery</strong>: Detect incomplete index updates and replay/rollback</li>
+<li><strong>Consistency Check</strong>: Verify index entries match actual record slots</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="02-architecture-overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="04-core-storage-components.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="02-architecture-overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="04-core-storage-components.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

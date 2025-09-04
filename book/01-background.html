@@ -1,0 +1,432 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js oranda-dark">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Background - rsketch</title>
+
+
+        <!-- Custom HTML head -->
+        
+        <meta name="description" content="Documentation for rsketch - A Rust project template with gRPC and multi-language code generation">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+        <link rel="stylesheet" href="oranda-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "oranda-dark" : "oranda-dark";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('orandamdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('orandamdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('orandamdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('oranda-dark')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="index.html">Introduction</a></li><li class="chapter-item expanded "><a href="01-background.html" class="active"><strong aria-hidden="true">1.</strong> Background</a></li><li class="chapter-item expanded "><a href="02-architecture-overview.html"><strong aria-hidden="true">2.</strong> Architecture Overview</a></li><li class="chapter-item expanded "><a href="03-record-manager.html"><strong aria-hidden="true">3.</strong> Table Manager</a></li><li class="chapter-item expanded "><a href="04-core-storage-components.html"><strong aria-hidden="true">4.</strong> Core Storage Components</a></li><li class="chapter-item expanded "><a href="05-file-system-integration.html"><strong aria-hidden="true">5.</strong> File System Integration</a></li><li class="chapter-item expanded "><a href="06-performance-optimization.html"><strong aria-hidden="true">6.</strong> Performance Optimization</a></li><li class="chapter-item expanded "><a href="07-reliability-and-recovery.html"><strong aria-hidden="true">7.</strong> Reliability and Recovery</a></li><li class="chapter-item expanded "><a href="08-configuration-and-api.html"><strong aria-hidden="true">8.</strong> Configuration and API</a></li><li class="chapter-item expanded "><a href="09-monitoring-and-observability.html"><strong aria-hidden="true">9.</strong> Monitoring and Observability</a></li><li class="chapter-item expanded "><a href="10-deployment-and-operations.html"><strong aria-hidden="true">10.</strong> Deployment and Operations</a></li><li class="chapter-item expanded "><a href="11-security.html"><strong aria-hidden="true">11.</strong> Security</a></li><li class="chapter-item expanded "><a href="12-testing-strategy.html"><strong aria-hidden="true">12.</strong> Testing Strategy</a></li><li class="chapter-item expanded "><a href="13-future-enhancements.html"><strong aria-hidden="true">13.</strong> Future Enhancements</a></li><li class="chapter-item expanded "><a href="14-implementation-roadmap.html"><strong aria-hidden="true">14.</strong> Implementation Roadmap</a></li><li class="chapter-item expanded "><a href="15-distributed-architecture.html"><strong aria-hidden="true">15.</strong> Distributed Architecture</a></li><li class="chapter-item expanded "><a href="16-component-design.html"><strong aria-hidden="true">16.</strong> Component Design</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="oranda-dark">Oranda Dark</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="oranda-light">Oranda Light</button></li>
+
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">rsketch</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/crrow/rsketch" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        <a href="https://github.com/crrow/rsketch/edit/main/docs/src/01-background.md" title="Suggest an edit" aria-label="Suggest an edit">
+                            <i id="git-edit-button" class="fa fa-edit"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="background"><a class="header" href="#background">Background</a></h1>
+<h2 id="problem-statement"><a class="header" href="#problem-statement">Problem Statement</a></h2>
+<p>In cryptocurrency trading systems, the OrderManager component faces significant performance challenges during high-volume market conditions. When market trends trigger rapid price movements, thousands of users can simultaneously submit orders, creating intense database load. Even with traditional solutions like database sharding and horizontal scaling, the system may still experience latency spikes that cause users to miss time-sensitive trading opportunities.</p>
+<p>This document analyzes the storage requirements for a high-performance order management system and proposes optimizations to achieve sub-millisecond latency.</p>
+<h2 id="requirements-analysis"><a class="header" href="#requirements-analysis">Requirements Analysis</a></h2>
+<h3 id="performance-requirements"><a class="header" href="#performance-requirements">Performance Requirements</a></h3>
+<ul>
+<li><strong>Latency</strong>: Target p99 latency &lt; 10ms for order operations</li>
+<li><strong>Throughput</strong>: Support 100,000+ orders per second during peak trading</li>
+<li><strong>Availability</strong>: 99.99% uptime with minimal impact from storage operations</li>
+</ul>
+<h3 id="data-characteristics"><a class="header" href="#data-characteristics">Data Characteristics</a></h3>
+<p>The system primarily handles "live order" data with specific access patterns:</p>
+<ol>
+<li><strong>Write-Heavy Workload</strong>: Orders are frequently inserted as users place new trades</li>
+<li><strong>Read-Heavy Queries</strong>: Users continuously query their active orders and market depth</li>
+<li><strong>Rare Updates</strong>: Orders are seldom modified (price adjustments, partial cancellations)</li>
+<li><strong>Lifecycle Management</strong>: Completed orders are archived to cold storage (e.g., ClickHouse) for analytics</li>
+</ol>
+<h3 id="consistency-requirements"><a class="header" href="#consistency-requirements">Consistency Requirements</a></h3>
+<ul>
+<li><strong>Strong Consistency</strong>: Critical for order placement and matching</li>
+<li><strong>Eventual Consistency</strong>: Acceptable for non-critical read operations</li>
+<li><strong>Durability</strong>: Orders must survive system crashes without data loss</li>
+</ul>
+<h2 id="current-architecture-limitations"><a class="header" href="#current-architecture-limitations">Current Architecture Limitations</a></h2>
+<h3 id="traditional-rdbms-approach-mysql"><a class="header" href="#traditional-rdbms-approach-mysql">Traditional RDBMS Approach (MySQL)</a></h3>
+<p>A typical MySQL-based order management system involves multiple I/O operations per transaction:</p>
+<ol>
+<li><strong>Network Round-trip</strong>: Application ↔ MySQL server communication</li>
+<li><strong>Transaction Log (binlog)</strong>: Write-ahead logging for durability</li>
+<li><strong>Data Pages</strong>: Actual row data writes to storage</li>
+<li><strong>Index Updates</strong>: B-tree index maintenance for quick lookups</li>
+<li><strong>Replication</strong>: If using master-slave setup for high availability</li>
+</ol>
+<p><strong>Total I/O Analysis</strong>:</p>
+<ul>
+<li>1 network operation (typically 0.1-1ms in local datacenter)</li>
+<li>2-4 disk operations (1-10ms each on traditional storage)</li>
+<li><strong>Result</strong>: 2-40ms total latency per operation</li>
+</ul>
+<h3 id="embedded-database-approach-rocksdb"><a class="header" href="#embedded-database-approach-rocksdb">Embedded Database Approach (RocksDB)</a></h3>
+<p>While embedded databases eliminate network overhead, they still face challenges:</p>
+<p><strong>Advantages</strong>:</p>
+<ul>
+<li>No network latency between application and storage</li>
+<li>Optimized LSM-tree structure for write-heavy workloads</li>
+<li>Efficient compression and bloom filters</li>
+</ul>
+<p><strong>Limitations</strong>:</p>
+<ul>
+<li>Write-Ahead Log (WAL) still requires disk I/O for durability</li>
+<li>Cloud block storage adds network latency (EBS, persistent disks)</li>
+<li>LSM compaction can cause periodic latency spikes</li>
+</ul>
+<h2 id="storage-io-analysis"><a class="header" href="#storage-io-analysis">Storage I/O Analysis</a></h2>
+<h3 id="disk-storage-performance"><a class="header" href="#disk-storage-performance">Disk Storage Performance</a></h3>
+<ul>
+<li><strong>Cloud Block Storage (EBS, GCP PD)</strong>: 1-10ms latency</li>
+<li><strong>Local NVMe SSDs</strong>: 0.1-1ms latency</li>
+<li><strong>Memory</strong>: 50-100 nanoseconds latency</li>
+</ul>
+<h3 id="the-io-bottleneck"><a class="header" href="#the-io-bottleneck">The I/O Bottleneck</a></h3>
+<p>Storage I/O remains the primary performance bottleneck because:</p>
+<ol>
+<li><strong>Mechanical Limitations</strong>: Even SSDs have microsecond-level latencies</li>
+<li><strong>Durability vs. Performance Trade-off</strong>: WAL writes ensure crash recovery but add latency</li>
+<li><strong>Cloud Storage Overhead</strong>: Network-attached storage adds round-trip time</li>
+</ol>
+<h2 id="系统架构分析"><a class="header" href="#系统架构分析">系统架构分析</a></h2>
+<h3 id="传统架构的根本性局限"><a class="header" href="#传统架构的根本性局限">传统架构的根本性局限</a></h3>
+<p>传统数据库架构在交易系统场景下存在以下根本性问题：</p>
+<h4 id="多层抽象开销"><a class="header" href="#多层抽象开销">多层抽象开销</a></h4>
+<pre><code>传统数据库请求路径:
+应用程序 → SQL解析 → 查询优化 → 执行计划 → 存储引擎 → 缓冲池 → 磁盘I/O
+每一层都增加延迟: ~500μs + ~200μs + ~300μs + ~100μs + ~50μs + ~2ms = ~3.15ms
+</code></pre>
+<h4 id="通用性-vs-专用性权衡"><a class="header" href="#通用性-vs-专用性权衡">通用性 vs 专用性权衡</a></h4>
+<ul>
+<li><strong>通用数据库</strong>: 设计为支持各种工作负载，但在特定场景下不够优化</li>
+<li><strong>交易系统需求</strong>: 高度专门化的数据访问模式和性能要求</li>
+<li><strong>解决方案</strong>: 为特定工作负载定制存储引擎</li>
+</ul>
+<h3 id="性能瓶颈深度分析"><a class="header" href="#性能瓶颈深度分析">性能瓶颈深度分析</a></h3>
+<h4 id="延迟分解分析"><a class="header" href="#延迟分解分析">延迟分解分析</a></h4>
+<p>针对p99 &lt; 10ms的目标，我们需要分解每个组件的延迟贡献：</p>
+<pre><code>目标延迟预算分配:
+┌─────────────────────────────────────────┐
+│ 总目标延迟: 10ms (内网优化)              │
+├─────────────────────────────────────────┤
+│ 网络传输:     0.1ms (1%)                │
+│ 接口层:       0.5ms (5%)                │
+│ 存储引擎:     6ms (60%)                 │
+│ 持久化层:     0.5ms (5%)                │
+│ 硬件层:       0.4ms (4%)                │
+│ 缓冲时间:     2.5ms (25%)               │
+└─────────────────────────────────────────┘
+</code></pre>
+<h4 id="io延迟层次分析"><a class="header" href="#io延迟层次分析">I/O延迟层次分析</a></h4>
+<pre><code>存储介质延迟对比:
+CPU L1缓存:     ~1ns     (基准)
+CPU L2缓存:     ~3ns     (3x)
+CPU L3缓存:     ~12ns    (12x)
+系统内存:       ~100ns   (100x)
+本地NVMe SSD:   ~25μs    (25,000x)
+网络SSD:       ~100μs   (100,000x)
+SATA SSD:      ~500μs   (500,000x)
+机械硬盘:      ~10ms    (10,000,000x)
+</code></pre>
+<h3 id="架构设计原则"><a class="header" href="#架构设计原则">架构设计原则</a></h3>
+<h4 id="1-分层优化策略"><a class="header" href="#1-分层优化策略">1. 分层优化策略</a></h4>
+<pre><code>性能优化路径图:
+阶段1: 消除SQL层 (50ms → 10ms)
+  ├── 直接二进制协议
+  ├── 预编译查询
+  └── 连接池优化
+
+阶段2: 内存化存储 (10ms → 5ms)
+  ├── 内存映射文件
+  ├── 零拷贝I/O
+  └── 固定大小记录
+
+阶段3: 硬件优化 (5ms → 2ms)
+  ├── CPU缓存对齐
+  ├── NUMA感知分配
+  └── 批处理操作
+</code></pre>
+<h4 id="2-专用化设计理念"><a class="header" href="#2-专用化设计理念">2. 专用化设计理念</a></h4>
+<ul>
+<li><strong>单一职责</strong>: 每个表专门存储一种业务对象</li>
+<li><strong>固定结构</strong>: 消除动态内存分配和碎片化</li>
+<li><strong>类型安全</strong>: 编译时确定的数据结构</li>
+<li><strong>直接访问</strong>: 绕过传统数据库的抽象层</li>
+</ul>
+<h2 id="解决方案架构概述"><a class="header" href="#解决方案架构概述">解决方案架构概述</a></h2>
+<h3 id="核心设计哲学"><a class="header" href="#核心设计哲学">核心设计哲学</a></h3>
+<h4 id="memory-first架构"><a class="header" href="#memory-first架构">Memory-First架构</a></h4>
+<ul>
+<li><strong>热数据常驻内存</strong>: 活跃交易数据完全存在RAM中</li>
+<li><strong>分层存储</strong>: 热/温/冷数据自动分层管理</li>
+<li><strong>异步持久化</strong>: 将持久化从关键路径中解耦</li>
+</ul>
+<h4 id="硬件感知设计"><a class="header" href="#硬件感知设计">硬件感知设计</a></h4>
+<ul>
+<li><strong>NUMA拓扑感知</strong>: 数据和计算绑定到相同NUMA节点</li>
+<li><strong>CPU缓存友好</strong>: 数据结构对齐到缓存行边界</li>
+<li><strong>存储介质优化</strong>: 针对NVMe SSD特性优化I/O模式</li>
+</ul>
+<h4 id="专用存储引擎"><a class="header" href="#专用存储引擎">专用存储引擎</a></h4>
+<ul>
+<li><strong>表驱动架构</strong>: 每种业务对象一个专用表</li>
+<li><strong>零抽象开销</strong>: 直接内存访问，无序列化</li>
+<li><strong>编译时优化</strong>: 利用Rust零成本抽象特性</li>
+</ul>
+<h3 id="系统分层架构"><a class="header" href="#系统分层架构">系统分层架构</a></h3>
+<pre><code>FileStore存储引擎分层设计:
+
+┌─────────────────────────────────────────┐
+│ 🌐 接口层 (API Gateway Layer)           │
+│   - gRPC/HTTP多协议支持                 │
+│   - 负载均衡和服务发现                   │
+│   - 认证授权和限流                       │
+└─────────────────────────────────────────┘
+┌─────────────────────────────────────────┐
+│ 💼 业务服务层 (Business Service Layer)  │
+│   - 订单生命周期管理                     │
+│   - 业务规则验证                         │
+│   - 事件发布和状态管理                   │
+└─────────────────────────────────────────┘
+┌─────────────────────────────────────────┐
+│ 🔧 数据服务层 (Data Service Layer)      │
+│   - 表管理和查询执行                     │
+│   - 事务协调和MVCC                      │
+│   - 索引管理和优化                       │
+└─────────────────────────────────────────┘
+┌─────────────────────────────────────────┐
+│ 🏗️ 存储引擎层 (Storage Engine Layer)    │
+│   - 内存池管理和页面分配                 │
+│   - 并发控制和锁管理                     │
+│   - 版本链和垃圾回收                     │
+└─────────────────────────────────────────┘
+┌─────────────────────────────────────────┐
+│ 💾 持久化层 (Persistence Layer)        │
+│   - WAL和快照管理                       │
+│   - 异步刷盘和恢复                       │
+│   - 备份和归档                           │
+└─────────────────────────────────────────┘
+┌─────────────────────────────────────────┐
+│ ⚡ 硬件抽象层 (Hardware Layer)          │
+│   - NVMe直接访问                        │
+│   - NUMA内存管理                        │
+│   - CPU缓存优化                         │
+└─────────────────────────────────────────┘
+</code></pre>
+<h3 id="关键技术决策"><a class="header" href="#关键技术决策">关键技术决策</a></h3>
+<h4 id="1-内存映射-vs-传统io"><a class="header" href="#1-内存映射-vs-传统io">1. 内存映射 vs 传统I/O</a></h4>
+<p><strong>选择</strong>: 内存映射文件 (mmap)
+<strong>理由</strong>:</p>
+<ul>
+<li>消除用户态/内核态切换开销</li>
+<li>利用OS页面缓存机制</li>
+<li>支持零拷贝数据访问</li>
+<li>自动内存管理和换页</li>
+</ul>
+<h4 id="2-固定-vs-变长记录"><a class="header" href="#2-固定-vs-变长记录">2. 固定 vs 变长记录</a></h4>
+<p><strong>选择</strong>: 固定大小记录
+<strong>理由</strong>:</p>
+<ul>
+<li>消除内存碎片化</li>
+<li>O(1)地址计算</li>
+<li>高效的内存预取</li>
+<li>简化并发控制</li>
+</ul>
+<h4 id="3-同步-vs-异步持久化"><a class="header" href="#3-同步-vs-异步持久化">3. 同步 vs 异步持久化</a></h4>
+<p><strong>选择</strong>: 混合策略
+<strong>关键路径</strong>: 同步到WAL (本地NVMe, ~500μs)
+<strong>数据文件</strong>: 异步刷盘 (后台批量写入)
+<strong>快照</strong>: 定期异步快照 (不阻塞业务)</p>
+<h2 id="下一步设计细节"><a class="header" href="#下一步设计细节">下一步设计细节</a></h2>
+<p>The following sections will detail our approach to building a low-latency, persistent storage system that meets these requirements through:</p>
+<ol>
+<li><strong>分层架构设计</strong>: 详细的组件职责划分和接口定义</li>
+<li><strong>存储引擎核心</strong>: 内存管理、索引系统、并发控制的具体实现</li>
+<li><strong>性能优化策略</strong>: 从硬件到应用层的全栈优化方案</li>
+<li><strong>分布式系统考虑</strong>: 可扩展性、一致性、容错性的平衡设计</li>
+</ol>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next" href="02-architecture-overview.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next" href="02-architecture-overview.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
